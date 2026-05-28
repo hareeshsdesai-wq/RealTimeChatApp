@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 // ─── MongoDB ────────────────────────────────────────────────────────────────
-mongoose.connect('mongodb+srv://chatadmin:chat123@cluster0.4wkmxke.mongodb.net/chatify?appName=Cluster0')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://chatadmin:chat123@cluster0.4wkmxke.mongodb.net/chatify?appName=Cluster0')
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB error:', err));
 
@@ -26,11 +26,11 @@ const User = mongoose.model('User', userSchema);
 
 const messageSchema = new mongoose.Schema({
   sender: String,
-  receiver: String,        // null if group message
-  groupId: String,         // null if DM
+  receiver: String,
+  groupId: String,
   message: String,
-  mediaUrl: String,        // path to uploaded file
-  mediaType: String,       // 'image' | 'video' | null
+  mediaUrl: String,
+  mediaType: String,
   seen: { type: Boolean, default: false },
   delivered: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
@@ -60,7 +60,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+  limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowed = /jpeg|jpg|png|gif|webp|mp4|mov|webm|mkv/;
     const ok = allowed.test(path.extname(file.originalname).toLowerCase()) &&
@@ -129,7 +129,6 @@ app.get('/api/messages/group/:groupId', async (req, res) => {
   }
 });
 
-// Mark messages as seen
 app.post('/api/messages/seen', async (req, res) => {
   try {
     const { viewer, sender } = req.body;
@@ -198,7 +197,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 // ─── Socket.IO ───────────────────────────────────────────────────────────────
-const onlineUsers = new Map(); // username -> socketId
+const onlineUsers = new Map();
 
 io.on('connection', (socket) => {
 
@@ -228,7 +227,6 @@ io.on('connection', (socket) => {
       };
 
       if (groupId) {
-        // Send to all group members
         const group = await Group.findOne({ groupId });
         if (group) {
           group.members.forEach(member => {
@@ -237,12 +235,10 @@ io.on('connection', (socket) => {
           });
         }
       } else {
-        // DM
         const receiverSocket = onlineUsers.get(receiver);
         if (receiverSocket) {
           io.to(receiverSocket).emit('receive_message', payload);
         }
-        // Also send back to sender (for their own UI confirmation)
         socket.emit('receive_message', payload);
       }
     } catch (e) {
@@ -281,7 +277,7 @@ io.on('connection', (socket) => {
 });
 
 // ─── Start ───────────────────────────────────────────────────────────────────
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
