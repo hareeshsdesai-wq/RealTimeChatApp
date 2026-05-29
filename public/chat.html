@@ -835,8 +835,20 @@
       .conv-name { font-size: 14px; }
       .conv-sub  { font-size: 12px; }
 
-      /* Footer */
-      .sidebar-footer { padding: 12px 14px; }
+      /* Scroll area must not overflow and push footer out */
+      .sidebar-scroll {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+      }
+
+      /* Footer — always pinned at bottom */
+      .sidebar-footer {
+        padding: 12px 14px;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 1;
+      }
       .me-av { width: 36px; height: 36px; }
 
       /* Chat header */
