@@ -917,14 +917,27 @@ socket.on('receive_message', data => {
       showToast(sender, message || '📎 Media');
     }
   } else {
+    // Only handle messages FROM others (own messages handled by message_sent)
+    if (sender === me) return;
     if (selected?.type === 'dm' && selected.id === sender) {
       appendBubble({ sender, message, mediaUrl, mediaType, _id, seen, delivered, createdAt: new Date() });
       scrollBottom();
-      if (sender !== me) markSeen(sender, receiver, null);
-    } else if (sender !== me) {
+      markSeen(sender, receiver, null);
+    } else {
       bumpUnread('dm_' + sender);
       showToast(sender, message || '📎 Media');
     }
+  }
+});
+
+// Server confirmation after our message is saved
+socket.on('message_sent', data => {
+  const rows = document.querySelectorAll('.msg-row.mine');
+  if (rows.length > 0) {
+    const last = rows[rows.length - 1];
+    if (!last.dataset.msgId) last.dataset.msgId = data._id;
+    const tick = last.querySelector('.ticks');
+    if (tick) { tick.className = 'ticks delivered'; tick.textContent = '✓✓'; }
   }
 });
 
@@ -1159,6 +1172,10 @@ async function sendMessage() {
       ? { receiver: selected.id }
       : { groupId: selected.id })
   };
+
+  // Optimistic UI - show bubble immediately
+  appendBubble({ sender: me, message, mediaUrl, mediaType, delivered: false, seen: false, createdAt: new Date() });
+  scrollBottom();
 
   socket.emit('send_message', payload);
   input.value = '';

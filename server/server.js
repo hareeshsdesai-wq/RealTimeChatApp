@@ -62,9 +62,8 @@ const upload = multer({
   storage,
   limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const allowed = /jpeg|jpg|png|gif|webp|mp4|mov|webm|mkv/;
-    const ok = allowed.test(path.extname(file.originalname).toLowerCase()) &&
-               allowed.test(file.mimetype.split('/')[1]);
+    // FIX: check mimetype starts with image or video instead of substring match
+    const ok = file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/');
     ok ? cb(null, true) : cb(new Error('Only images and videos allowed'));
   }
 });
@@ -197,7 +196,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 // ─── Socket.IO ───────────────────────────────────────────────────────────────
-const onlineUsers = new Map();
+const onlineUsers = new Map(); // username -> socketId
 
 io.on('connection', (socket) => {
 
@@ -227,6 +226,7 @@ io.on('connection', (socket) => {
       };
 
       if (groupId) {
+        // Send to all group members
         const group = await Group.findOne({ groupId });
         if (group) {
           group.members.forEach(member => {
@@ -235,27 +235,39 @@ io.on('connection', (socket) => {
           });
         }
       } else {
+        // FIX: Only send to receiver, NOT back to sender
+        // Sender already appends bubble optimistically in the frontend
         const receiverSocket = onlineUsers.get(receiver);
         if (receiverSocket) {
           io.to(receiverSocket).emit('receive_message', payload);
         }
-        socket.emit('receive_message', payload);
+        // Send confirmation back to sender with the saved _id and timestamp
+        socket.emit('message_sent', payload);
       }
     } catch (e) {
       console.error('Message save error:', e);
     }
   });
 
-  socket.on('typing', ({ sender, receiver, groupId }) => {
+  // FIX: Typing for groups — broadcast to all group members except sender
+  socket.on('typing', async ({ sender, receiver, groupId }) => {
     if (groupId) {
-      socket.to(socket.id).emit('user_typing', { username: sender, groupId });
+      const group = await Group.findOne({ groupId });
+      if (group) {
+        group.members.forEach(member => {
+          if (member !== sender) {
+            const sid = onlineUsers.get(member);
+            if (sid) io.to(sid).emit('user_typing', { username: sender, groupId });
+          }
+        });
+      }
     } else {
       const sid = onlineUsers.get(receiver);
       if (sid) io.to(sid).emit('user_typing', { username: sender });
     }
   });
 
-  socket.on('message_seen', async ({ viewer, sender, messageId }) => {
+  socket.on('message_seen', async ({ viewer, sender }) => {
     try {
       await Message.updateMany(
         { sender, receiver: viewer, seen: false },
