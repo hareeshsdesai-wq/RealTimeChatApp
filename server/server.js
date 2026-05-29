@@ -195,6 +195,34 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+
+// Delete account
+app.delete('/api/delete-account/:username', async (req,res)=>{
+  try{
+    const username=req.params.username;
+
+    await User.deleteOne({ username });
+
+    await Message.deleteMany({
+      $or:[
+        { sender: username },
+        { receiver: username }
+      ]
+    });
+
+    await Group.updateMany({},{
+      $pull:{ members: username }
+    });
+
+    res.json({ success:true });
+
+  }catch(err){
+    console.log(err);
+    res.json({ success:false });
+  }
+});
+
+
 // ─── Socket.IO ───────────────────────────────────────────────────────────────
 const onlineUsers = new Map(); // username -> socketId
 
