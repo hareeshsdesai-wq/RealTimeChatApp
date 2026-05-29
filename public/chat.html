@@ -801,6 +801,7 @@
   </div>
 
   <div class="chat-hdr" id="chatHdr">
+    <button class="back-btn" id="backBtn" onclick="goBackToSidebar()">&#8592;</button>
     <div class="hdr-av" id="hdrAv"></div>
     <div>
       <div class="hdr-name" id="hdrName"></div>
@@ -1048,6 +1049,7 @@ async function openDM(username) {
   renderDMs();
 
   showChatUI();
+  showChatOnMobile();
   setHeader(username[0].toUpperCase(), avColor(username), false, username, onlineSet.has(username) ? 'Online' : 'Offline');
 
   document.getElementById('msgsWrap').innerHTML = '<div class="date-div">Today</div>';
@@ -1066,6 +1068,7 @@ async function openGroup(g) {
   renderGroups();
 
   showChatUI();
+  showChatOnMobile();
   setHeader('👥', 'av2', true, g.name, `${g.members.length} members`);
 
   document.getElementById('msgsWrap').innerHTML = '<div class="date-div">Today</div>';
@@ -1431,6 +1434,109 @@ function logout() {
   localStorage.removeItem('username');
   window.location.href = 'login.html';
 }
+
+// ─── Mobile Navigation ────────────────────────────────────────────────────
+function isMobile() { return window.innerWidth <= 768; }
+
+function showChatOnMobile() {
+  if (!isMobile()) return;
+  document.querySelector('.sidebar').classList.add('hidden');
+  document.querySelector('.chat-area').classList.add('show');
+}
+
+function goBackToSidebar() {
+  document.querySelector('.sidebar').classList.remove('hidden');
+  document.querySelector('.chat-area').classList.remove('show');
+  selected = null;
+}
 </script>
 </body>
-</html>
+</html
+    /* ═══ RESPONSIVE / MOBILE ══════════════════════════════════════════ */
+
+    /* Back button - only shown on mobile when chat is open */
+    .back-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text2);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px 4px 0;
+      flex-shrink: 0;
+    }
+
+    /* Mobile: show back button in header */
+    @media (max-width: 768px) {
+      body { overflow: hidden; }
+
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        width: 100vw;
+        min-width: unset;
+        z-index: 50;
+        transform: translateX(0);
+        transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+      }
+
+      .sidebar.hidden {
+        transform: translateX(-100%);
+      }
+
+      .chat-area {
+        position: fixed;
+        left: 0; top: 0; right: 0; bottom: 0;
+        width: 100vw;
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+        z-index: 50;
+      }
+
+      .chat-area.show {
+        transform: translateX(0);
+      }
+
+      .back-btn { display: flex; align-items: center; }
+
+      .msg-row { max-width: 85%; }
+
+      .bubble img { max-width: 200px; }
+      .bubble video { max-width: 220px; }
+
+      .emoji-panel {
+        left: 8px;
+        right: 8px;
+        width: auto;
+        bottom: 65px;
+      }
+
+      .modal {
+        width: calc(100vw - 32px);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .toast {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+        max-width: unset;
+      }
+    }
+
+    /* Tablet: sidebar narrower */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .sidebar {
+        width: 240px;
+        min-width: 240px;
+      }
+      .msg-row { max-width: 75%; }
+    }
+
+    /* Large screens */
+    @media (min-width: 1400px) {
+      .sidebar { width: 320px; min-width: 320px; }
+      .msg-row { max-width: 55%; }
+    }
+>

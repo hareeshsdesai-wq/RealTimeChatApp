@@ -194,6 +194,17 @@
       background: var(--border);
       margin: 28px 0;
     }
+
+    @media (max-width: 480px) {
+      .card {
+        width: 100vw;
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 40px 24px;
+        border: none;
+      }
+      body::before, body::after { display: none; }
+    }
   </style>
 </head>
 <body>
