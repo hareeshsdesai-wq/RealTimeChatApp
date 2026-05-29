@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Chatify</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="/socket.io/socket.io.js"></script>
@@ -1050,6 +1050,7 @@ async function openDM(username) {
 
   showChatUI();
   showChatOnMobile();
+  pushMobileHistory();
   setHeader(username[0].toUpperCase(), avColor(username), false, username, onlineSet.has(username) ? 'Online' : 'Offline');
 
   document.getElementById('msgsWrap').innerHTML = '<div class="date-div">Today</div>';
@@ -1069,6 +1070,7 @@ async function openGroup(g) {
 
   showChatUI();
   showChatOnMobile();
+  pushMobileHistory();
   setHeader('👥', 'av2', true, g.name, `${g.members.length} members`);
 
   document.getElementById('msgsWrap').innerHTML = '<div class="date-div">Today</div>';
@@ -1435,108 +1437,174 @@ function logout() {
   window.location.href = 'login.html';
 }
 
-// ─── Mobile Navigation ────────────────────────────────────────────────────
+// ─── Mobile Navigation (WhatsApp-style) ──────────────────────────────────
 function isMobile() { return window.innerWidth <= 768; }
 
 function showChatOnMobile() {
   if (!isMobile()) return;
-  document.querySelector('.sidebar').classList.add('hidden');
-  document.querySelector('.chat-area').classList.add('show');
+  document.querySelector('.sidebar').classList.add('slide-out');
+  document.querySelector('.chat-area').classList.add('slide-in');
 }
 
 function goBackToSidebar() {
-  document.querySelector('.sidebar').classList.remove('hidden');
-  document.querySelector('.chat-area').classList.remove('show');
+  document.querySelector('.sidebar').classList.remove('slide-out');
+  document.querySelector('.chat-area').classList.remove('slide-in');
   selected = null;
+  // Close emoji if open
+  document.getElementById('emojiPanel').classList.remove('on');
+}
+
+// Handle browser back button on mobile
+window.addEventListener('popstate', () => {
+  if (isMobile() && selected) goBackToSidebar();
+});
+
+// Push state when opening chat so back button works
+function pushMobileHistory() {
+  if (isMobile()) history.pushState({ chat: true }, '');
 }
 </script>
 </body>
 </html
-    /* ═══ RESPONSIVE / MOBILE ══════════════════════════════════════════ */
-
-    /* Back button - only shown on mobile when chat is open */
+    /* ═══ BACK BUTTON (hidden on desktop) ══════════════════════════════ */
     .back-btn {
       display: none;
       background: none;
       border: none;
-      color: var(--text2);
-      font-size: 20px;
+      color: var(--text);
+      font-size: 22px;
       cursor: pointer;
-      padding: 4px 8px 4px 0;
+      padding: 4px 10px 4px 0;
       flex-shrink: 0;
+      line-height: 1;
     }
 
-    /* Mobile: show back button in header */
-    @media (max-width: 768px) {
-      body { overflow: hidden; }
+    /* ═══ TABLET ════════════════════════════════════════════════════════ */
+    @media (min-width: 769px) and (max-width: 1100px) {
+      .sidebar { width: 240px; min-width: 240px; }
+      .msg-row  { max-width: 78%; }
+      .brand-name { font-size: 17px; }
+    }
 
+    /* ═══ LARGE SCREENS ════════════════════════════════════════════════ */
+    @media (min-width: 1400px) {
+      .sidebar  { width: 340px; min-width: 340px; }
+      .msg-row  { max-width: 55%; }
+    }
+
+    /* ═══ MOBILE — WhatsApp-style full screen panels ════════════════════ */
+    @media (max-width: 768px) {
+      html, body {
+        height: 100%;
+        overflow: hidden;
+        /* Prevent bounce scroll on iOS */
+        position: fixed;
+        width: 100%;
+      }
+
+      /* Sidebar = contacts screen, full screen */
       .sidebar {
         position: fixed;
-        left: 0; top: 0; bottom: 0;
+        inset: 0;
         width: 100vw;
         min-width: unset;
-        z-index: 50;
+        z-index: 10;
+        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
         transform: translateX(0);
-        transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
       }
-
-      .sidebar.hidden {
+      .sidebar.slide-out {
         transform: translateX(-100%);
+        pointer-events: none;
       }
 
+      /* Chat area = chat screen, full screen, starts off-screen right */
       .chat-area {
         position: fixed;
-        left: 0; top: 0; right: 0; bottom: 0;
+        inset: 0;
         width: 100vw;
+        z-index: 10;
+        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
         transform: translateX(100%);
-        transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
-        z-index: 50;
       }
-
-      .chat-area.show {
+      .chat-area.slide-in {
         transform: translateX(0);
       }
 
+      /* Show back arrow */
       .back-btn { display: flex; align-items: center; }
 
-      .msg-row { max-width: 85%; }
+      /* Sidebar top: make search bigger and more tappable */
+      .sidebar-top { padding: 14px 14px 12px; }
+      .brand { margin-bottom: 10px; }
+      .brand-name { font-size: 20px; }
+      .search-wrap { padding: 11px 13px; border-radius: 12px; }
+      .search-wrap input { font-size: 14px; }
 
-      .bubble img { max-width: 200px; }
-      .bubble video { max-width: 220px; }
+      /* Section headers */
+      .section-hdr { padding: 12px 14px 5px; }
+      .section-hdr span { font-size: 11px; }
 
+      /* Contact items — bigger tap targets */
+      .conv-item { padding: 12px 14px; }
+      .av { width: 44px; height: 44px; font-size: 16px; }
+      .conv-name { font-size: 14px; }
+      .conv-sub  { font-size: 12px; }
+
+      /* Footer */
+      .sidebar-footer { padding: 12px 14px; }
+      .me-av { width: 36px; height: 36px; }
+
+      /* Chat header */
+      .chat-hdr { padding: 12px 14px; }
+      .hdr-av   { width: 36px; height: 36px; }
+      .hdr-name { font-size: 15px; }
+      .hdr-sub  { font-size: 11px; }
+
+      /* Messages */
+      .msgs-wrap { padding: 12px 10px 6px; }
+      .msg-row   { max-width: 85%; }
+      .bubble    { font-size: 14px; padding: 9px 12px; }
+      .bubble img   { max-width: 210px; max-height: 180px; }
+      .bubble video { max-width: 230px; }
+
+      /* Input bar */
+      .input-bar { padding: 8px 10px; }
+      .msg-input { font-size: 14px; padding: 10px 12px; }
+      .send-btn  { width: 40px; height: 40px; font-size: 15px; }
+      .icon-btn  { font-size: 20px; }
+
+      /* Emoji panel: full width, above keyboard */
       .emoji-panel {
-        left: 8px;
-        right: 8px;
-        width: auto;
-        bottom: 65px;
+        position: fixed;
+        left: 0; right: 0;
+        bottom: 0;
+        width: 100vw;
+        border-radius: 16px 16px 0 0;
+        z-index: 200;
       }
 
+      /* Modal: full width */
       .modal {
-        width: calc(100vw - 32px);
-        max-height: 90vh;
+        width: calc(100vw - 24px);
+        max-height: 88vh;
         overflow-y: auto;
+        padding: 24px 20px;
       }
 
+      /* Toast: full width at bottom */
       .toast {
-        bottom: 12px;
-        right: 12px;
-        left: 12px;
+        bottom: 10px; right: 10px; left: 10px;
         max-width: unset;
       }
-    }
 
-    /* Tablet: sidebar narrower */
-    @media (min-width: 769px) and (max-width: 1024px) {
-      .sidebar {
-        width: 240px;
-        min-width: 240px;
+      /* Empty state hidden on mobile (user sees sidebar instead) */
+      .empty-state { display: none; }
+
+      /* Lightbox full screen */
+      .lightbox img {
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
       }
-      .msg-row { max-width: 75%; }
-    }
-
-    /* Large screens */
-    @media (min-width: 1400px) {
-      .sidebar { width: 320px; min-width: 320px; }
-      .msg-row { max-width: 55%; }
     }
 >
