@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const detectEmotion = require('./utils/emotionalAnalyzer');
 
 const app = express();
 const server = http.createServer(app);
@@ -20,6 +21,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://chatadmin:chat123@clu
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, trim: true },
   password: String,
+  avatarUrl: String,
   createdAt: { type: Date, default: Date.now }
 });
 const User = mongoose.model('User', userSchema);
@@ -31,6 +33,7 @@ const messageSchema = new mongoose.Schema({
   message: String,
   mediaUrl: String,
   mediaType: String,
+  emotion: { type: String, default: 'neutral' },  // ← ADD THIS LINE
   seen: { type: Boolean, default: false },
   delivered: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
@@ -80,8 +83,8 @@ app.post('/api/auth/register', async (req, res) => {
     const exists = await User.findOne({ username });
     if (exists) return res.json({ message: 'Username already taken' });
     const hashed = await bcrypt.hash(password, 10);
-    await User.create({ username, password: hashed });
-    res.json({ message: 'Registration successful' });
+    await User.create({ username, password: hashed, avatarUrl: null });
+    res.json({ message: 'Registration successful', username, avatarUrl: null });
   } catch (e) {
     res.json({ message: 'Server error' });
   }
@@ -94,7 +97,7 @@ app.post('/api/auth/login', async (req, res) => {
     if (!user) return res.json({ message: 'User not found' });
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return res.json({ message: 'Wrong password' });
-    res.json({ message: 'Login successful', username });
+    res.json({ message: 'Login successful', username, avatarUrl: user.avatarUrl || null });
   } catch (e) {
     res.json({ message: 'Server error' });
   }
@@ -188,10 +191,39 @@ app.delete('/api/groups/:groupId', async (req, res) => {
 
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await User.find({}, 'username').sort({ username: 1 });
-    res.json(users.map(u => u.username));
+    const users = await User.find({}, 'username avatarUrl').sort({ username: 1 });
+    res.json(users.map(u => ({ username: u.username, avatarUrl: u.avatarUrl || null })));
   } catch (e) {
     res.json([]);
+  }
+});
+
+app.get('/api/user/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }, 'username avatarUrl');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ username: user.username, avatarUrl: user.avatarUrl || null });
+  } catch (e) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/profile-picture', upload.single('avatar'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+    const username = req.body.username;
+    if (!username) return res.status(400).json({ message: 'Missing username' });
+    const avatarUrl = '/uploads/' + req.file.filename;
+    const user = await User.findOneAndUpdate(
+      { username },
+      { avatarUrl },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Avatar updated', avatarUrl });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -237,20 +269,24 @@ io.on('connection', (socket) => {
   socket.on('send_message', async (data) => {
     const { sender, receiver, groupId, message, mediaUrl, mediaType } = data;
     try {
-      const msg = await Message.create({
-        sender, receiver: receiver || null,
-        groupId: groupId || null,
-        message, mediaUrl: mediaUrl || null,
-        mediaType: mediaType || null,
-        delivered: true
-      });
+   const emotion = detectEmotion(message || '');
+
+const msg = await Message.create({
+  sender, receiver: receiver || null,
+  groupId: groupId || null,
+  message, mediaUrl: mediaUrl || null,
+  mediaType: mediaType || null,
+  delivered: true,
+  emotion
+});
 
       const payload = {
         _id: msg._id,
         sender, receiver, groupId,
         message, mediaUrl, mediaType,
         delivered: true, seen: false,
-        createdAt: msg.createdAt
+        createdAt: msg.createdAt,
+        emotion
       };
 
       if (groupId) {

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="/css/emotions.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Chatify</title>
@@ -175,6 +176,12 @@
       font-size: 14px;
       flex-shrink: 0;
       position: relative;
+      overflow: hidden;
+    }
+    .av img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .av.group { border-radius: 12px; font-size: 18px; }
 
@@ -234,6 +241,65 @@
       white-space: nowrap;
     }
     .logout-btn:hover { background: rgba(255,107,107,0.2); }
+
+    .profile-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      font-size: 20px;
+      transition: color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .profile-btn:hover { color: var(--accent2); background: rgba(124,111,255,0.1); }
+
+    .profile-dropdown {
+      position: absolute;
+      bottom: 68px;
+      right: 16px;
+      width: 220px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.22);
+      overflow: hidden;
+      display: none;
+      z-index: 50;
+    }
+    .profile-dropdown.open { display: block; }
+    .profile-item {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .profile-item:hover { background: rgba(124,111,255,0.08); }
+
+    .profile-photo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: var(--text2);
+    }
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     /* ═══ CHAT AREA ════════════════════════════════════════════════════ */
     .chat-area {
@@ -990,11 +1056,20 @@
     </div>
     <button class="mobile-menu-btn" onclick="toggleMobileMenu()" id="mobileMenuBtn">⋮</button>
     <div class="mobile-dropdown" id="mobileDropdown">
-      <div class="mobile-dropdown-item" onclick="toggleMobileMenu()">
+      <div class="mobile-dropdown-item" onclick="openProfileModal(); toggleMobileMenu()">
         <span>👤</span> Profile
+      </div>
+      <div class="mobile-dropdown-item" onclick="openGroupModal(); toggleMobileMenu()">
+        <span>➕</span> New group
+      </div>
+      <div class="mobile-dropdown-item" onclick="openMultiGroupModal(); toggleMobileMenu()">
+        <span>👥</span> Multiple groups
       </div>
       <div class="mobile-dropdown-item" onclick="logout()">
         <span>🚪</span> Sign out
+      </div>
+      <div class="mobile-dropdown-item" onclick="deleteAccount(); toggleMobileMenu()">
+        <span>🗑️</span> Delete account
       </div>
     </div>
   </div>
@@ -1014,13 +1089,21 @@
     <div id="usersList"></div>
   </div>
 
-  <div class="sidebar-footer">
+  <div class="sidebar-footer" style="position:relative;">
     <div class="me-av" id="meAv"></div>
     <div style="flex:1;min-width:0">
       <div class="me-name" id="meName"></div>
       <div class="me-status">Online</div>
     </div>
+    <button class="profile-btn" id="profileBtn" onclick="toggleProfileMenu()">⋮</button>
     <button class="logout-btn" onclick="logout()">Sign out</button>
+    <div class="profile-dropdown" id="profileDropdown">
+      <div class="profile-item" onclick="openProfileModal(); toggleProfileMenu()">👤 Profile</div>
+      <div class="profile-item" onclick="openGroupModal(); toggleProfileMenu()">➕ New group</div>
+      <div class="profile-item" onclick="openMultiGroupModal(); toggleProfileMenu()">👥 Multiple groups</div>
+      <div class="profile-item" onclick="logout()">🚪 Sign out</div>
+      <div class="profile-item" onclick="deleteAccount()">🗑️ Delete account</div>
+    </div>
   </div>
 </div>
 
@@ -1094,6 +1177,41 @@
   </div>
 </div>
 
+<div class="overlay" id="profileOverlay">
+  <div class="modal">
+    <h2>Profile</h2>
+    <p>Update your avatar or delete your account permanently.</p>
+    <div class="profile-photo" id="profilePhotoPreview">📷</div>
+    <label style="margin-bottom:8px;display:block;font-size:12px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;">Upload profile photo</label>
+    <input type="file" id="profilePicInput" accept="image/*">
+    <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+    <div class="modal-btns" style="flex-wrap:wrap;gap:10px;">
+      <button class="btn-cancel" onclick="closeProfileModal()">Cancel</button>
+      <button class="btn-create" onclick="saveProfilePicture()">Save profile</button>
+      <button class="btn-cancel" style="background: rgba(255,107,107,0.15); color: var(--red);" onclick="deleteAccount()">Delete account</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="multiGroupOverlay">
+  <div class="modal">
+    <h2>Create Multiple Groups</h2>
+    <p>Add up to three group names and select members once. Empty group names are ignored.</p>
+    <label>Group name 1</label>
+    <input type="text" id="multiGroupName1" placeholder="e.g. Project One">
+    <label>Group name 2</label>
+    <input type="text" id="multiGroupName2" placeholder="e.g. Project Two">
+    <label>Group name 3</label>
+    <input type="text" id="multiGroupName3" placeholder="e.g. Project Three">
+    <label>Add Members</label>
+    <div class="members-grid" id="multiMembersGrid"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeMultiGroupModal()">Cancel</button>
+      <button class="btn-create" onclick="createMultipleGroups()">Create groups</button>
+    </div>
+  </div>
+</div>
+
 <!-- ─── LIGHTBOX ─────────────────────────────────────────────────────────── -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close">✕</button>
@@ -1116,10 +1234,12 @@ if (!me) { window.location.href = 'login.html'; throw new Error('No user'); }
 
 let selected    = null;   // { type: 'dm'|'group', id: string, name: string }
 let typingTimer = null;
-let allUsers    = [];
-let myGroups    = [];
-let onlineSet   = new Set();
-let pendingFile = null;   // { file, url, type }
+let allUsers      = [];
+let myGroups      = [];
+let onlineSet     = new Set();
+let pendingFile   = null;   // { file, url, type }
+let profileAvatar = null;
+let profileFile   = null;
 
 // ─── Set up my footer ─────────────────────────────────────────────────────
 const meAv = document.getElementById('meAv');
@@ -1138,6 +1258,16 @@ function toggleMobileMenu() {
   dd.classList.toggle('open');
 }
 
+function toggleProfileMenu() {
+  const dd = document.getElementById('profileDropdown');
+  dd.classList.toggle('open');
+}
+
+function closeProfileMenu() {
+  const dd = document.getElementById('profileDropdown');
+  if (dd) dd.classList.remove('open');
+}
+
 // Close dropdown when clicking outside
 document.addEventListener('click', function(e) {
   const btn = document.getElementById('mobileMenuBtn');
@@ -1145,7 +1275,101 @@ document.addEventListener('click', function(e) {
   if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
     dd.classList.remove('open');
   }
+  const profileBtn = document.getElementById('profileBtn');
+  const profileDd  = document.getElementById('profileDropdown');
+  if (profileDd && profileBtn && !profileBtn.contains(e.target) && !profileDd.contains(e.target)) {
+    profileDd.classList.remove('open');
+  }
 });
+
+async function fetchUserProfile() {
+  try {
+    const res = await fetch('/api/user/' + me);
+    if (!res.ok) return;
+    const data = await res.json();
+    profileAvatar = data.avatarUrl || null;
+    if (profileAvatar) setMyAvatar(profileAvatar);
+  } catch (e) {
+    console.warn('Unable to fetch profile', e);
+  }
+}
+
+function setMyAvatar(url) {
+  profileAvatar = url;
+  if (meAv) {
+    meAv.innerHTML = `<img src="${url}" alt="${me}">`;
+    meAv.className = 'me-av';
+  }
+  if (mobileAv) {
+    mobileAv.innerHTML = `<img src="${url}" alt="${me}">`;
+    mobileAv.className = 'me-av';
+  }
+}
+
+function renderAvatarHtml(username, avatarUrl) {
+  if (avatarUrl) return `<img src="${avatarUrl}" alt="${username}">`;
+  return username[0].toUpperCase();
+}
+
+function openProfileModal() {
+  document.getElementById('profileUsername').textContent = me;
+  const preview = document.getElementById('profilePhotoPreview');
+  if (profileAvatar) {
+    preview.innerHTML = `<img src="${profileAvatar}" alt="${me}">`;
+  } else {
+    preview.textContent = '📷';
+  }
+  profileFile = null;
+  document.getElementById('profilePicInput').value = '';
+  document.getElementById('profileOverlay').classList.add('on');
+}
+
+function closeProfileModal() {
+  document.getElementById('profileOverlay').classList.remove('on');
+}
+
+document.getElementById('profilePicInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  profileFile = file;
+  const url = URL.createObjectURL(file);
+  const preview = document.getElementById('profilePhotoPreview');
+  preview.innerHTML = `<img src="${url}" alt="preview">`;
+});
+
+async function saveProfilePicture() {
+  if (!profileFile) return alert('Select a profile image first.');
+  const fd = new FormData();
+  fd.append('avatar', profileFile);
+  fd.append('username', me);
+  const res = await fetch('/api/profile-picture', {
+    method: 'POST',
+    body: fd
+  });
+  const data = await res.json();
+  if (data.avatarUrl) {
+    profileAvatar = data.avatarUrl;
+    setMyAvatar(profileAvatar);
+    closeProfileModal();
+    showToast('Profile', 'Avatar updated successfully');
+  } else {
+    alert(data.message || 'Upload failed');
+  }
+}
+
+async function deleteAccount() {
+  if (!confirm('Delete your account permanently? This cannot be undone.')) return;
+  const res = await fetch('/api/delete-account/' + me, {
+    method: 'DELETE'
+  });
+  const data = await res.json();
+  if (data.success) {
+    localStorage.removeItem('username');
+    window.location.href = 'register.html';
+  } else {
+    alert('Account deletion failed.');
+  }
+}
 
 // ─── Socket ───────────────────────────────────────────────────────────────
 const socket = io();
@@ -1158,27 +1382,27 @@ socket.on('user_list', users => {
 });
 
 socket.on('receive_message', data => {
-  const { sender, receiver, groupId, message, mediaUrl, mediaType, _id, seen, delivered } = data;
+  const { sender, receiver, groupId, message, mediaUrl, mediaType, _id, seen, delivered, emotion } = data;
 
   if (groupId) {
     if (selected?.type === 'group' && selected.id === groupId) {
-      // Skip if this is our own message - optimistic UI already added it
       if (sender !== me) {
-        appendBubble({ sender, message, mediaUrl, mediaType, _id, seen, delivered, createdAt: new Date() });
+        appendBubble({ sender, message, mediaUrl, mediaType, _id, seen, delivered, emotion, createdAt: new Date() });
         scrollBottom();
         markSeen(sender, null, groupId);
+        showSmartReplies(emotion || 'neutral');
       }
     } else if (sender !== me) {
       bumpUnread('grp_' + groupId);
       showToast(sender, message || '📎 Media');
     }
   } else {
-    // Only handle messages FROM others (own messages handled by message_sent)
     if (sender === me) return;
     if (selected?.type === 'dm' && selected.id === sender) {
-      appendBubble({ sender, message, mediaUrl, mediaType, _id, seen, delivered, createdAt: new Date() });
+      appendBubble({ sender, message, mediaUrl, mediaType, _id, seen, delivered, emotion, createdAt: new Date() });
       scrollBottom();
       markSeen(sender, receiver, null);
+      showSmartReplies(emotion || 'neutral');
     } else {
       bumpUnread('dm_' + sender);
       showToast(sender, message || '📎 Media');
@@ -1218,11 +1442,12 @@ socket.on('user_typing', ({ username, groupId: gid }) => {
 
 // ─── Load data ────────────────────────────────────────────────────────────
 async function loadAll() {
+  await fetchUserProfile();
   const [usersRes, groupsRes] = await Promise.all([
     fetch('/api/users').then(r => r.json()),
     fetch('/api/groups/' + me).then(r => r.json())
   ]);
-  allUsers = usersRes.filter(u => u !== me);
+  allUsers = usersRes.filter(u => u.username !== me);
   myGroups = groupsRes;
   renderDMs();
   renderGroups();
@@ -1235,28 +1460,33 @@ function renderDMs() {
   const list = document.getElementById('usersList');
   list.innerHTML = '';
 
-  const filtered = allUsers.filter(u => u.toLowerCase().includes(q));
+  const filtered = allUsers.filter(u => u.username.toLowerCase().includes(q));
   if (!filtered.length) {
     list.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:var(--muted)">No users found</div>`;
     return;
   }
 
   filtered.forEach(u => {
-    const online  = onlineSet.has(u);
-    const unread  = getUnread('dm_' + u);
-    const isActive = selected?.type === 'dm' && selected.id === u;
+    const username = u.username;
+    const online  = onlineSet.has(username);
+    const unread  = getUnread('dm_' + username);
+    const isActive = selected?.type === 'dm' && selected.id === username;
+    const avatarHtml = u.avatarUrl
+      ? `<img src="${u.avatarUrl}" alt="${username}">`
+      : username[0].toUpperCase();
+    const avatarClass = 'av' + (u.avatarUrl ? '' : ' ' + avColor(username));
 
     const el = document.createElement('div');
     el.className = 'conv-item' + (isActive ? ' active' : '');
-    el.dataset.id = 'dm_' + u;
-    el.onclick = () => openDM(u);
+    el.dataset.id = 'dm_' + username;
+    el.onclick = () => openDM(username);
     el.innerHTML = `
-      <div class="av ${avColor(u)}">
-        ${u[0].toUpperCase()}
+      <div class="${avatarClass}">
+        ${avatarHtml}
         <div class="av-dot ${online ? 'on' : 'off'}"></div>
       </div>
       <div class="conv-info">
-        <div class="conv-name">${u}</div>
+        <div class="conv-name">${username}</div>
         <div class="conv-sub ${online ? 'online' : ''}">${online ? '● Online' : 'Offline'}</div>
       </div>
       ${unread ? `<div class="badge">${unread}</div>` : ''}
@@ -1355,6 +1585,8 @@ function appendBubble(m) {
 
   const row = document.createElement('div');
   row.className = 'msg-row ' + (isMine ? 'mine' : 'theirs');
+  const emotion = m.emotion || 'neutral';
+if (isMine) row.classList.add(emotion);
   if (m._id) row.dataset.msgId = m._id;
 
   const d = new Date(m.createdAt);
@@ -1378,7 +1610,7 @@ function appendBubble(m) {
     bubbleContent = esc(m.message || '');
   }
 
-  bodyHtml += `<div class="bubble">${bubbleContent}</div>`;
+  bodyHtml += `<div class="bubble ${emotion}">${bubbleContent}</div>`;
 
   // Footer (time + ticks)
   let tickClass = 'sent', tickText = '✓';
@@ -1585,22 +1817,40 @@ buildEmojiPicker();
 
 // ─── Group Modal ──────────────────────────────────────────────────────────
 function openGroupModal() {
-  const grid = document.getElementById('membersGrid');
-  grid.innerHTML = '';
-  allUsers.forEach(u => {
-    const chip = document.createElement('div');
-    chip.className = 'member-chip';
-    chip.dataset.user = u;
-    chip.innerHTML = `<div class="chip-av ${avColor(u)}">${u[0].toUpperCase()}</div>${u}`;
-    chip.onclick = () => chip.classList.toggle('selected');
-    grid.appendChild(chip);
-  });
+  renderMemberChips('membersGrid');
   document.getElementById('groupOverlay').classList.add('on');
 }
 
 function closeGroupModal() {
   document.getElementById('groupOverlay').classList.remove('on');
   document.getElementById('groupNameInput').value = '';
+}
+
+function renderMemberChips(containerId) {
+  const grid = document.getElementById(containerId);
+  if (!grid) return;
+  grid.innerHTML = '';
+  allUsers.forEach(u => {
+    const username = u.username;
+    const chip = document.createElement('div');
+    chip.className = 'member-chip';
+    chip.dataset.user = username;
+    chip.innerHTML = `<div class="chip-av ${avColor(username)}">${username[0].toUpperCase()}</div>${username}`;
+    chip.onclick = () => chip.classList.toggle('selected');
+    grid.appendChild(chip);
+  });
+}
+
+function openMultiGroupModal() {
+  document.getElementById('multiGroupName1').value = '';
+  document.getElementById('multiGroupName2').value = '';
+  document.getElementById('multiGroupName3').value = '';
+  renderMemberChips('multiMembersGrid');
+  document.getElementById('multiGroupOverlay').classList.add('on');
+}
+
+function closeMultiGroupModal() {
+  document.getElementById('multiGroupOverlay').classList.remove('on');
 }
 
 async function createGroup() {
@@ -1623,6 +1873,39 @@ async function createGroup() {
   } else {
     alert(data.message || 'Error');
   }
+}
+
+async function createMultipleGroups() {
+  const names = [
+    document.getElementById('multiGroupName1').value.trim(),
+    document.getElementById('multiGroupName2').value.trim(),
+    document.getElementById('multiGroupName3').value.trim()
+  ].filter(Boolean);
+  if (!names.length) return alert('Enter at least one group name.');
+  const members = [...document.querySelectorAll('#multiMembersGrid .member-chip.selected')].map(c => c.dataset.user);
+  if (!members.length) return alert('Select at least one member.');
+
+  const results = await Promise.all(names.map(name => {
+    return fetch('/api/groups/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, members, createdBy: me })
+    }).then(r => r.json());
+  }));
+
+  const created = results.filter(r => r.groupId);
+  if (!created.length) {
+    alert(results[0]?.message || 'Unable to create groups.');
+    return;
+  }
+
+  created.forEach(data => {
+    myGroups.push({ groupId: data.groupId, name: data.name, members: data.members, createdBy: me });
+  });
+
+  renderGroups();
+  closeMultiGroupModal();
+  if (created[0]) openGroup({ groupId: created[0].groupId, name: created[0].name, members: created[0].members });
 }
 
 // ─── Lightbox ─────────────────────────────────────────────────────────────
@@ -1715,6 +1998,33 @@ window.addEventListener('popstate', () => {
 function pushMobileHistory() {
   if (isMobile()) history.pushState({ chat: true }, '');
 }
+function showSmartReplies(emotion) {
+  const existing = document.getElementById('smartReplyBar');
+  if (existing) existing.remove();
+
+  const replies = getSuggestions(emotion);
+  if (!replies.length) return;
+
+  const bar = document.createElement('div');
+  bar.id = 'smartReplyBar';
+  bar.style.cssText = 'display:flex;gap:8px;padding:8px 16px;flex-wrap:wrap;';
+
+  replies.forEach(text => {
+    const btn = document.createElement('button');
+    btn.textContent = text;
+    btn.style.cssText = 'background:rgba(124,111,255,0.15);border:1px solid rgba(124,111,255,0.3);color:#b8a9ff;border-radius:20px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;';
+    btn.onclick = () => {
+      document.getElementById('msgInput').value = text;
+      document.getElementById('msgInput').focus();
+      bar.remove();
+    };
+    bar.appendChild(btn);
+  });
+
+  document.getElementById('inputBar').insertBefore(bar, document.querySelector('.input-row'));
+}
 </script>
+<script src="/js/replySuggestions.js"></script>
+<script src="/js/emotion-chat.js"></script>
 </body>
 </html>

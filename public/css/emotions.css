@@ -1,0 +1,5 @@
+.bubble.happy    { background: #FFD700 !important; color: #000 !important; }
+.bubble.positive { background: #00E676 !important; color: #000 !important; }
+.bubble.sad      { background: #2979FF !important; color: #fff !important; }
+.bubble.angry    { background: #FF1744 !important; color: #fff !important; }
+.bubble.neutral  { background: #607D8B !important; color: #fff !important; }
