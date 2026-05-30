@@ -261,7 +261,14 @@ app.post('/api/profile-picture', upload.single('avatar'), async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
+app.delete('/api/message/:id', async (req, res) => {
+  try {
+    await Message.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false });
+  }
+});
 
 // Delete account
 app.delete('/api/delete-account/:username', async (req,res)=>{

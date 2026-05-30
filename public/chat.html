@@ -1138,12 +1138,12 @@ body.theme-softdark {
       <div class="me-status">Online</div>
     </div>
     <button class="profile-btn" id="profileBtn" onclick="toggleProfileMenu()">⋮</button>
-    <div class="profile-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
+<div class="profile-item" style="flex-direction:column;align-items:flex-start;gap:8px;cursor:default;">
   🎨 Theme
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
-    <button onclick="setTheme('')"       style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#080810;color:white;font-size:11px;">Default</button>
-    <button onclick="setTheme('white')"  style="padding:4px 10px;border-radius:6px;border:1px solid #ccc;cursor:pointer;background:white;color:#333;font-size:11px;">White</button>
-    <button onclick="setTheme('grey')"   style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#2c2c2c;color:white;font-size:11px;">Grey</button>
+    <button onclick="setTheme('')"          style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#080810;color:white;font-size:11px;">Default</button>
+    <button onclick="setTheme('white')"     style="padding:4px 10px;border-radius:6px;border:1px solid #ccc;cursor:pointer;background:white;color:#333;font-size:11px;">White</button>
+    <button onclick="setTheme('grey')"      style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#2c2c2c;color:white;font-size:11px;">Grey</button>
     <button onclick="setTheme('lightblue')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#e8f4fd;color:#0a2540;font-size:11px;">Blue</button>
     <button onclick="setTheme('softdark')"  style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#1a1a2a;color:#e0e0ff;font-size:11px;">Soft Dark</button>
   </div>
@@ -1631,8 +1631,14 @@ function showChatUI() {
 
 function setHeader(avText, avClass, isGroup, name, sub) {
   const av = document.getElementById('hdrAv');
-  av.textContent = avText;
-  av.className   = 'hdr-av ' + avClass + (isGroup ? ' group' : '');
+  if (!isGroup && allUsers.find(u => u.username === name)?.avatarUrl) {
+    const url = allUsers.find(u => u.username === name).avatarUrl;
+    av.innerHTML = `<img src="${url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+    av.className = 'hdr-av';
+  } else {
+    av.textContent = avText;
+    av.className = 'hdr-av ' + avClass + (isGroup ? ' group' : '');
+  }
   document.getElementById('hdrName').textContent = name;
   document.getElementById('hdrSub').textContent  = sub;
 }
@@ -1685,8 +1691,16 @@ if (isMine) row.classList.add(emotion);
     </div>
   `;
 
-  row.innerHTML = bodyHtml;
-  wrap.appendChild(row);
+ row.innerHTML = bodyHtml;
+row.oncontextmenu = (e) => {
+  if (!m._id) return;
+  e.preventDefault();
+  if (!confirm('Delete this message?')) return;
+  fetch(`/api/message/${m._id}`, { method: 'DELETE' })
+    .then(r => r.json())
+    .then(d => { if (d.success) row.remove(); });
+};
+wrap.appendChild(row);
 }
 
 function scrollBottom() {
