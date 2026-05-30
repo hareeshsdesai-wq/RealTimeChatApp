@@ -5,10 +5,12 @@ function detectEmotion(text) {
   if (!text || typeof text !== "string") return "neutral";
   const result = sentiment.analyze(text);
 
-  if (result.score > 3) return "happy";
-  if (result.score > 0) return "positive";
-  if (result.score < -1) return "angry";  // ← only this line changed
-  if (result.score < 0) return "sad";
+  console.log(text, "→ score:", result.score); // ← add this to debug
+
+  if (result.score >= 3)  return "happy";
+  if (result.score >= 1)  return "positive";
+  if (result.score <= -3) return "angry";
+  if (result.score <= -1) return "sad";
   return "neutral";
 }
 
