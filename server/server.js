@@ -243,6 +243,15 @@ app.get('/api/user/:username', async (req, res) => {
   }
 });
 
+app.post('/api/profile-picture/remove', async (req, res) => {
+  try {
+    const { username } = req.body;
+    await User.findOneAndUpdate({ username }, { avatarUrl: null });
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false });
+  }
+});
 app.post('/api/profile-picture', upload.single('avatar'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded' });

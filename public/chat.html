@@ -29,37 +29,34 @@
       --sent-bg: linear-gradient(135deg, #7c6fff 0%, #b06fff 100%);
       --recv-bg: #1a1a2e;
     }
-body.theme-white {
-  --bg: #ffffff; --sidebar: #f5f5f5; --surface: #ffffff;
-  --surface2: #f0f0f0; --surface3: #e8e8e8;
-  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.12);
-  --text: #1a1a2e; --text2: #555577; --muted: #9999aa;
-  --recv-bg: #f0f0f0;
-}
-
-body.theme-grey {
-  --bg: #2c2c2c; --sidebar: #242424; --surface: #2c2c2c;
-  --surface2: #333333; --surface3: #3a3a3a;
-  --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.12);
-  --text: #f0f0f0; --text2: #bbbbbb; --muted: #888888;
-  --recv-bg: #333333;
-}
-
-body.theme-lightblue {
-  --bg: #e8f4fd; --sidebar: #ddeefa; --surface: #ffffff;
-  --surface2: #d0e8f7; --surface3: #c0ddf2;
-  --border: rgba(0,100,200,0.1); --border2: rgba(0,100,200,0.15);
-  --text: #0a2540; --text2: #2a5080; --muted: #6a90b0;
-  --recv-bg: #d0e8f7;
-}
-
-body.theme-softdark {
-  --bg: #1a1a2a; --sidebar: #141420; --surface: #1e1e30;
-  --surface2: #242438; --surface3: #2a2a40;
-  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.1);
-  --text: #e0e0ff; --text2: #9090bb; --muted: #606080;
-  --recv-bg: #242438;
-}
+    body.theme-white {
+      --bg: #ffffff; --sidebar: #f5f5f5; --surface: #ffffff;
+      --surface2: #f0f0f0; --surface3: #e8e8e8;
+      --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.12);
+      --text: #1a1a2e; --text2: #555577; --muted: #9999aa;
+      --recv-bg: #f0f0f0;
+    }
+    body.theme-grey {
+      --bg: #2c2c2c; --sidebar: #242424; --surface: #2c2c2c;
+      --surface2: #333333; --surface3: #3a3a3a;
+      --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.12);
+      --text: #f0f0f0; --text2: #bbbbbb; --muted: #888888;
+      --recv-bg: #333333;
+    }
+    body.theme-lightblue {
+      --bg: #e8f4fd; --sidebar: #ddeefa; --surface: #ffffff;
+      --surface2: #d0e8f7; --surface3: #c0ddf2;
+      --border: rgba(0,100,200,0.1); --border2: rgba(0,100,200,0.15);
+      --text: #0a2540; --text2: #2a5080; --muted: #6a90b0;
+      --recv-bg: #d0e8f7;
+    }
+    body.theme-softdark {
+      --bg: #1a1a2a; --sidebar: #141420; --surface: #1e1e30;
+      --surface2: #242438; --surface3: #2a2a40;
+      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.1);
+      --text: #e0e0ff; --text2: #9090bb; --muted: #606080;
+      --recv-bg: #242438;
+    }
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
@@ -87,10 +84,7 @@ body.theme-softdark {
       flex-shrink: 0;
     }
 
-    /* Mobile topbar (hidden on desktop) */
-    .mobile-topbar {
-      display: none;
-    }
+    .mobile-topbar { display: none; }
 
     .brand {
       display: flex;
@@ -185,9 +179,7 @@ body.theme-softdark {
       border-radius: 0;
     }
     .conv-item:hover { background: var(--surface2); }
-    .conv-item.active {
-      background: rgba(124,111,255,0.1);
-    }
+    .conv-item.active { background: rgba(124,111,255,0.1); }
     .conv-item.active::before {
       content: '';
       position: absolute;
@@ -208,11 +200,7 @@ body.theme-softdark {
       position: relative;
       overflow: hidden;
     }
-    .av img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .av img { width: 100%; height: 100%; object-fit: cover; }
     .av.group { border-radius: 12px; font-size: 18px; }
 
     .av-dot {
@@ -242,6 +230,7 @@ body.theme-softdark {
       flex-shrink: 0;
     }
 
+    /* ── SIDEBAR FOOTER (desktop) ───────────────────────────────────── */
     .sidebar-footer {
       padding: 12px 16px;
       border-top: 1px solid var(--border);
@@ -249,28 +238,14 @@ body.theme-softdark {
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
+      position: relative;   /* ← needed for dropdown positioning */
     }
 
-    .me-av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+    .me-av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; overflow: hidden; }
+    .me-av img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .me-name { font-size: 13px; font-weight: 600; }
     .me-status { font-size: 11px; color: var(--teal); display: flex; align-items: center; gap: 4px; }
     .me-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
-
-    .logout-btn {
-      margin-left: auto;
-      background: rgba(255,107,107,0.1);
-      border: 1px solid rgba(255,107,107,0.2);
-      color: var(--red);
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    .logout-btn:hover { background: rgba(255,107,107,0.2); }
 
     .profile-btn {
       background: none;
@@ -282,23 +257,28 @@ body.theme-softdark {
       font-size: 20px;
       transition: color 0.2s, background 0.2s;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .profile-btn:hover { color: var(--accent2); background: rgba(124,111,255,0.1); }
 
     .profile-dropdown {
       position: absolute;
       bottom: 68px;
-      right: 16px;
-      width: 220px;
+      left: 0;
+      right: 0;
+      width: 100%;
       background: var(--surface2);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border2);
       border-radius: 14px;
-      box-shadow: 0 18px 50px rgba(0,0,0,0.22);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.4);
       overflow: hidden;
       display: none;
-      z-index: 50;
+      z-index: 100;
     }
     .profile-dropdown.open { display: block; }
+
     .profile-item {
       padding: 12px 14px;
       display: flex;
@@ -310,6 +290,27 @@ body.theme-softdark {
       transition: background 0.2s;
     }
     .profile-item:hover { background: rgba(124,111,255,0.08); }
+
+    .theme-row {
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .theme-row-label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 0.5px; }
+    .theme-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .theme-btns button {
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-family: inherit;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    .theme-btns button:hover { opacity: 0.8; }
 
     .profile-photo {
       width: 90px;
@@ -329,6 +330,8 @@ body.theme-softdark {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      max-width: 90px;
+      max-height: 90px;
     }
 
     /* ═══ CHAT AREA ════════════════════════════════════════════════════ */
@@ -341,7 +344,6 @@ body.theme-softdark {
       overflow: hidden;
     }
 
-    /* Background texture */
     .chat-area::before {
       content: '';
       position: absolute;
@@ -366,7 +368,6 @@ body.theme-softdark {
     .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--text2); }
     .empty-state p  { font-size: 13px; color: var(--muted); }
 
-    /* Chat header */
     .chat-hdr {
       display: none;
       align-items: center;
@@ -381,12 +382,12 @@ body.theme-softdark {
     }
     .chat-hdr.on { display: flex; }
 
-    .hdr-av { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+    .hdr-av { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; overflow: hidden; }
+    .hdr-av img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .hdr-av.group { border-radius: 11px; font-size: 17px; }
     .hdr-name { font-size: 15px; font-weight: 700; font-family: 'Syne', sans-serif; }
     .hdr-sub  { font-size: 11px; color: var(--teal); margin-top: 1px; }
 
-    /* Messages */
     .msgs-wrap {
       flex: 1;
       overflow-y: auto;
@@ -436,35 +437,19 @@ body.theme-softdark {
     .theirs .bubble { background: var(--recv-bg); color: var(--text); border-bottom-left-radius: 5px; border: 1px solid var(--border); }
 
     .bubble img {
-      max-width: 240px;
-      max-height: 200px;
-      border-radius: 10px;
-      display: block;
-      cursor: pointer;
-      transition: transform 0.15s;
+      max-width: 240px; max-height: 200px;
+      border-radius: 10px; display: block; cursor: pointer; transition: transform 0.15s;
     }
     .bubble img:hover { transform: scale(1.02); }
+    .bubble video { max-width: 260px; border-radius: 10px; display: block; }
 
-    .bubble video {
-      max-width: 260px;
-      border-radius: 10px;
-      display: block;
-    }
-
-    .msg-footer {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 0 4px;
-    }
+    .msg-footer { display: flex; align-items: center; gap: 4px; padding: 0 4px; }
     .msg-time { font-size: 10px; color: var(--muted); }
-
     .ticks { font-size: 12px; line-height: 1; }
     .ticks.sent      { color: var(--muted); }
     .ticks.delivered { color: var(--muted); }
     .ticks.seen      { color: var(--teal); }
 
-    /* Typing */
     .typing-bar {
       padding: 4px 20px 6px;
       font-size: 11px;
@@ -492,7 +477,6 @@ body.theme-softdark {
       30% { transform: translateY(-4px); opacity: 1; }
     }
 
-    /* Input bar */
     .input-bar {
       padding: 12px 16px;
       border-top: 1px solid var(--border);
@@ -507,7 +491,6 @@ body.theme-softdark {
     }
     .input-bar.on { display: flex; }
 
-    /* Media preview */
     .media-preview {
       display: none;
       align-items: center;
@@ -518,40 +501,22 @@ body.theme-softdark {
       border: 1px solid var(--border);
     }
     .media-preview.on { display: flex; }
-    .media-preview img, .media-preview video {
-      height: 56px;
-      border-radius: 8px;
-      object-fit: cover;
-    }
+    .media-preview img, .media-preview video { height: 56px; border-radius: 8px; object-fit: cover; }
     .media-preview span { font-size: 12px; color: var(--text2); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .media-preview button {
       background: rgba(255,107,107,0.15);
-      border: none;
-      color: var(--red);
-      border-radius: 6px;
-      width: 26px; height: 26px;
-      cursor: pointer;
-      font-size: 14px;
+      border: none; color: var(--red); border-radius: 6px;
+      width: 26px; height: 26px; cursor: pointer; font-size: 14px;
       display: flex; align-items: center; justify-content: center;
     }
 
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .input-row { display: flex; align-items: center; gap: 10px; }
 
     .icon-btn {
-      background: none;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 8px;
-      font-size: 18px;
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      padding: 6px; border-radius: 8px; font-size: 18px;
       display: flex; align-items: center; justify-content: center;
-      transition: color 0.2s, background 0.2s;
-      flex-shrink: 0;
+      transition: color 0.2s, background 0.2s; flex-shrink: 0;
     }
     .icon-btn:hover { color: var(--accent2); background: rgba(124,111,255,0.1); }
 
@@ -577,23 +542,16 @@ body.theme-softdark {
     .send-btn {
       width: 42px; height: 42px;
       background: linear-gradient(135deg, var(--accent), #9f5cff);
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-size: 17px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.15s, opacity 0.15s;
-      flex-shrink: 0;
+      border: none; border-radius: 12px; color: white; font-size: 17px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s, opacity 0.15s; flex-shrink: 0;
     }
     .send-btn:hover  { opacity: 0.9; transform: scale(1.05); }
     .send-btn:active { transform: scale(0.95); }
 
-    /* ═══ EMOJI PICKER ═════════════════════════════════════════════════ */
     .emoji-panel {
       position: absolute;
-      bottom: 70px;
-      left: 300px;
+      bottom: 70px; left: 300px;
       background: var(--surface);
       border: 1px solid var(--border2);
       border-radius: 16px;
@@ -605,71 +563,44 @@ body.theme-softdark {
       animation: fadeUp 0.2s ease-out;
     }
     .emoji-panel.on { display: block; }
-
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .emoji-cats {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
-    }
+    .emoji-cats { display: flex; gap: 4px; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
     .emoji-cat-btn {
-      background: none; border: none;
-      font-size: 18px; cursor: pointer;
-      padding: 4px 7px; border-radius: 8px;
-      transition: background 0.15s;
-      opacity: 0.5;
+      background: none; border: none; font-size: 18px; cursor: pointer;
+      padding: 4px 7px; border-radius: 8px; transition: background 0.15s; opacity: 0.5;
     }
     .emoji-cat-btn:hover, .emoji-cat-btn.active { background: var(--surface2); opacity: 1; }
 
     .emoji-search {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 7px 10px;
-      color: var(--text);
-      font-size: 12px;
-      outline: none;
-      font-family: inherit;
-      margin-bottom: 8px;
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 10px; color: var(--text);
+      font-size: 12px; outline: none; font-family: inherit; margin-bottom: 8px;
     }
     .emoji-search::placeholder { color: var(--muted); }
 
     .emoji-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 2px;
-      max-height: 180px;
-      overflow-y: auto;
+      display: grid; grid-template-columns: repeat(8, 1fr);
+      gap: 2px; max-height: 180px; overflow-y: auto;
     }
     .emoji-grid::-webkit-scrollbar { width: 3px; }
     .emoji-grid::-webkit-scrollbar-thumb { background: var(--surface3); }
 
     .e-btn {
-      background: none; border: none;
-      font-size: 20px; cursor: pointer;
-      padding: 5px; border-radius: 6px;
-      transition: background 0.1s;
-      line-height: 1;
+      background: none; border: none; font-size: 20px; cursor: pointer;
+      padding: 5px; border-radius: 6px; transition: background 0.1s; line-height: 1;
     }
     .e-btn:hover { background: var(--surface2); }
 
-    /* ═══ GROUP CREATION MODAL ═════════════════════════════════════════ */
     .overlay {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: rgba(0,0,0,0.75);
       backdrop-filter: blur(4px);
-      z-index: 200;
-      display: none;
-      align-items: center;
-      justify-content: center;
+      z-index: 200; display: none;
+      align-items: center; justify-content: center;
     }
     .overlay.on { display: flex; }
 
@@ -685,150 +616,77 @@ body.theme-softdark {
       from { opacity: 0; transform: scale(0.93); }
       to   { opacity: 1; transform: scale(1); }
     }
-
-    .modal h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 20px; font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .modal p { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
-
+    .modal h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .modal p  { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
     .modal label {
       display: block; font-size: 11px; font-weight: 700;
       letter-spacing: 0.8px; text-transform: uppercase;
       color: var(--muted); margin-bottom: 7px;
     }
-
     .modal input[type=text] {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 11px 14px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 14px;
-      outline: none;
-      margin-bottom: 18px;
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 14px; color: var(--text);
+      font-family: inherit; font-size: 14px; outline: none; margin-bottom: 18px;
       transition: border-color 0.2s;
     }
     .modal input[type=text]:focus { border-color: var(--accent); }
 
     .members-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 22px;
-      max-height: 150px;
-      overflow-y: auto;
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 22px; max-height: 150px; overflow-y: auto;
     }
-
     .member-chip {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.15s;
-      user-select: none;
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 10px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px;
+      font-size: 13px; cursor: pointer; transition: all 0.15s; user-select: none;
     }
     .member-chip:hover { border-color: var(--accent); }
-    .member-chip.selected {
-      background: rgba(124,111,255,0.15);
-      border-color: var(--accent);
-      color: var(--accent2);
-    }
+    .member-chip.selected { background: rgba(124,111,255,0.15); border-color: var(--accent); color: var(--accent2); }
     .member-chip .chip-av {
-      width: 22px; height: 22px;
-      border-radius: 50%;
+      width: 22px; height: 22px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 11px; font-weight: 700;
     }
 
-    .modal-btns {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
+    .modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
     .modal-btns button {
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding: 10px 20px; border-radius: 10px;
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
     }
-
-    .btn-cancel {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text2);
-    }
+    .btn-cancel { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); }
     .btn-cancel:hover { background: var(--surface3); }
-
-    .btn-create {
-      background: linear-gradient(135deg, var(--accent), #9f5cff);
-      border: none;
-      color: white;
-    }
+    .btn-create { background: linear-gradient(135deg, var(--accent), #9f5cff); border: none; color: white; }
     .btn-create:hover { opacity: 0.9; }
 
-    /* ═══ IMAGE LIGHTBOX ═══════════════════════════════════════════════ */
     .lightbox {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.93);
-      z-index: 300;
-      display: none;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.93);
+      z-index: 300; display: none; align-items: center; justify-content: center;
     }
     .lightbox.on { display: flex; }
-    .lightbox img {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 12px;
-      box-shadow: 0 0 80px rgba(0,0,0,0.8);
-    }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 12px; box-shadow: 0 0 80px rgba(0,0,0,0.8); }
     .lightbox-close {
-      position: absolute;
-      top: 20px; right: 24px;
-      background: rgba(255,255,255,0.1);
-      border: none; color: white;
-      width: 40px; height: 40px;
-      border-radius: 50%;
+      position: absolute; top: 20px; right: 24px;
+      background: rgba(255,255,255,0.1); border: none; color: white;
+      width: 40px; height: 40px; border-radius: 50%;
       font-size: 20px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
     }
 
-    /* ═══ TOAST ════════════════════════════════════════════════════════ */
     .toast {
-      position: fixed;
-      bottom: 24px; right: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-left: 3px solid var(--accent);
-      border-radius: 12px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-      z-index: 999;
-      transform: translateX(120%);
-      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--surface); border: 1px solid var(--border2);
+      border-left: 3px solid var(--accent); border-radius: 12px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6); z-index: 999;
+      transform: translateX(120%); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
       max-width: 280px;
     }
     .toast.show { transform: translateX(0); }
     .toast-sender { font-size: 13px; font-weight: 700; }
     .toast-msg    { font-size: 12px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 
-    /* ═══ AVATAR COLORS ════════════════════════════════════════════════ */
     .av0 { background: rgba(124,111,255,0.2); color: #b8a9ff; }
     .av1 { background: rgba(0,229,192,0.15);  color: #00e5c0; }
     .av2 { background: rgba(255,107,157,0.15);color: #ff6b9d; }
@@ -837,33 +695,20 @@ body.theme-softdark {
     .av5 { background: rgba(200,100,255,0.15);color: #c864ff; }
 
     .del-grp-btn {
-      background: none;
-      border: none;
-      font-size: 15px;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 6px;
-      opacity: 0;
-      transition: opacity 0.2s, background 0.2s;
-      flex-shrink: 0;
+      background: none; border: none; font-size: 15px; cursor: pointer;
+      padding: 4px; border-radius: 6px; opacity: 0;
+      transition: opacity 0.2s, background 0.2s; flex-shrink: 0;
     }
     .conv-item:hover .del-grp-btn { opacity: 1; }
     .del-grp-btn:hover { background: rgba(255,107,107,0.15); }
 
-    /* hidden file input */
     #fileInput { display: none; }
 
-    /* ═══ BACK BUTTON (hidden on desktop) ══════════════════════════════ */
     .back-btn {
       display: none;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 4px 10px 4px 0;
-      flex-shrink: 0;
-      line-height: 1;
+      background: none; border: none; color: var(--text);
+      font-size: 22px; cursor: pointer;
+      padding: 4px 10px 4px 0; flex-shrink: 0; line-height: 1;
     }
 
     /* ═══ TABLET ════════════════════════════════════════════════════════ */
@@ -879,17 +724,10 @@ body.theme-softdark {
       .msg-row  { max-width: 55%; }
     }
 
-    /* ═══ MOBILE — WhatsApp-style full screen panels ════════════════════ */
+    /* ═══ MOBILE ════════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
-      html, body {
-        height: 100%;
-        overflow: hidden;
-        /* Prevent bounce scroll on iOS */
-        position: fixed;
-        width: 100%;
-      }
+      html, body { height: 100%; overflow: hidden; position: fixed; width: 100%; }
 
-      /* Show mobile topbar, hide desktop footer */
       .mobile-topbar {
         display: flex;
         align-items: center;
@@ -901,167 +739,83 @@ body.theme-softdark {
       }
 
       .mobile-menu-btn {
-        background: none;
-        border: none;
-        color: var(--text);
-        font-size: 22px;
-        cursor: pointer;
-        padding: 4px 8px;
-        border-radius: 6px;
-        line-height: 1;
+        background: none; border: none; color: var(--text);
+        font-size: 22px; cursor: pointer;
+        padding: 4px 8px; border-radius: 6px; line-height: 1;
       }
-
       .mobile-menu-btn:hover { background: var(--surface2); }
 
       .mobile-dropdown {
         display: none;
-        position: absolute;
-        top: 100%;
-        right: 10px;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        min-width: 160px;
-        z-index: 999;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-        overflow: hidden;
+        position: absolute; top: 100%; right: 10px;
+        background: var(--surface2); border: 1px solid var(--border);
+        border-radius: 10px; min-width: 160px; z-index: 999;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3); overflow: hidden;
       }
-
       .mobile-dropdown.open { display: block; }
 
       .mobile-dropdown-item {
-        padding: 12px 16px;
-        cursor: pointer;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--text);
-        transition: background 0.15s;
+        padding: 12px 16px; cursor: pointer; font-size: 14px;
+        display: flex; align-items: center; gap: 10px;
+        color: var(--text); transition: background 0.15s;
       }
-
       .mobile-dropdown-item:hover { background: var(--surface3); }
 
-      .sidebar-footer { display: none; }
+      /* Hide the desktop footer on mobile */
+      .sidebar-footer { display: none !important; }
 
-      /* Sidebar = contacts screen, full screen */
       .sidebar {
-        position: fixed;
-        inset: 0;
-        width: 100vw;
-        min-width: unset;
-        z-index: 10;
-        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+        position: fixed; inset: 0; width: 100vw; min-width: unset;
+        z-index: 10; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
         transform: translateX(0);
       }
-      .sidebar.slide-out {
-        transform: translateX(-100%);
-        pointer-events: none;
-      }
+      .sidebar.slide-out { transform: translateX(-100%); pointer-events: none; }
 
-      /* Chat area = chat screen, full screen, starts off-screen right */
       .chat-area {
-        position: fixed;
-        inset: 0;
-        width: 100vw;
-        z-index: 10;
-        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+        position: fixed; inset: 0; width: 100vw;
+        z-index: 10; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
         transform: translateX(100%);
       }
-      .chat-area.slide-in {
-        transform: translateX(0);
-      }
+      .chat-area.slide-in { transform: translateX(0); }
 
-      /* Show back arrow */
       .back-btn { display: flex; align-items: center; }
-
-      /* Sidebar top: make search bigger and more tappable */
       .sidebar-top { padding: 14px 14px 12px; }
       .brand { margin-bottom: 10px; }
       .brand-name { font-size: 20px; }
       .search-wrap { padding: 11px 13px; border-radius: 12px; }
       .search-wrap input { font-size: 14px; }
-
-      /* Section headers */
       .section-hdr { padding: 12px 14px 5px; }
       .section-hdr span { font-size: 11px; }
-
-      /* Contact items — bigger tap targets */
       .conv-item { padding: 12px 14px; }
       .av { width: 44px; height: 44px; font-size: 16px; }
       .conv-name { font-size: 14px; }
       .conv-sub  { font-size: 12px; }
-
-      /* Scroll area must not overflow and push footer out */
-      .sidebar-scroll {
-        flex: 1;
-        overflow-y: auto;
-        min-height: 0;
-      }
-
-      /* Footer — always pinned at bottom */
-      .sidebar-footer {
-        padding: 12px 14px;
-        flex-shrink: 0;
-        position: relative;
-        z-index: 1;
-      }
+      .sidebar-scroll { flex: 1; overflow-y: auto; min-height: 0; }
       .me-av { width: 36px; height: 36px; }
-
-      /* Chat header */
       .chat-hdr { padding: 12px 14px; }
       .hdr-av   { width: 36px; height: 36px; }
       .hdr-name { font-size: 15px; }
       .hdr-sub  { font-size: 11px; }
-
-      /* Messages */
       .msgs-wrap { padding: 12px 10px 6px; }
       .msg-row   { max-width: 85%; }
       .bubble    { font-size: 14px; padding: 9px 12px; }
       .bubble img   { max-width: 210px; max-height: 180px; }
       .bubble video { max-width: 230px; }
-
-      /* Input bar */
       .input-bar { padding: 8px 10px; }
       .msg-input { font-size: 14px; padding: 10px 12px; }
       .send-btn  { width: 40px; height: 40px; font-size: 15px; }
       .icon-btn  { font-size: 20px; }
 
-      /* Emoji panel: full width, above keyboard */
       .emoji-panel {
-        position: fixed;
-        left: 0; right: 0;
-        bottom: 0;
-        width: 100vw;
-        border-radius: 16px 16px 0 0;
-        z-index: 200;
+        position: fixed; left: 0; right: 0; bottom: 0;
+        width: 100vw; border-radius: 16px 16px 0 0; z-index: 200;
       }
-
-      /* Modal: full width */
-      .modal {
-        width: calc(100vw - 24px);
-        max-height: 88vh;
-        overflow-y: auto;
-        padding: 24px 20px;
-      }
-
-      /* Toast: full width at bottom */
-      .toast {
-        bottom: 10px; right: 10px; left: 10px;
-        max-width: unset;
-      }
-
-      /* Empty state hidden on mobile (user sees sidebar instead) */
+      .modal { width: calc(100vw - 24px); max-height: 88vh; overflow-y: auto; padding: 24px 20px; }
+      .toast { bottom: 10px; right: 10px; left: 10px; max-width: unset; }
       .empty-state { display: none; }
-
-      /* Lightbox full screen */
-      .lightbox img {
-        max-width: 100vw;
-        max-height: 100vh;
-        border-radius: 0;
-      }
+      .lightbox img { max-width: 100vw; max-height: 100vh; border-radius: 0; }
     }
->  </style>
+  </style>
 </head>
 <body>
 
@@ -1078,7 +832,7 @@ body.theme-softdark {
     </div>
   </div>
 
-  <!-- Mobile-only top bar with profile menu -->
+  <!-- Mobile-only top bar -->
   <div class="mobile-topbar" id="mobileTopbar">
     <div style="display:flex;align-items:center;gap:10px;">
       <div class="me-av" id="mobileAv"></div>
@@ -1096,17 +850,18 @@ body.theme-softdark {
         <span>👥</span> Multiple groups
       </div>
       <div class="mobile-dropdown-item" onclick="window.location.href='insights.html'">
-  <span>📊</span> Insights
-</div><div class="mobile-dropdown-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
-  <span>🎨 Theme</span>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
-    <button onclick="setTheme('')"          style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#080810;color:white;font-size:11px;">Default</button>
-    <button onclick="setTheme('white')"     style="padding:4px 10px;border-radius:6px;border:1px solid #ccc;cursor:pointer;background:white;color:#333;font-size:11px;">White</button>
-    <button onclick="setTheme('grey')"      style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#2c2c2c;color:white;font-size:11px;">Grey</button>
-    <button onclick="setTheme('lightblue')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#e8f4fd;color:#0a2540;font-size:11px;">Blue</button>
-    <button onclick="setTheme('softdark')"  style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#1a1a2a;color:#e0e0ff;font-size:11px;">Soft Dark</button>
-  </div>
-</div>
+        <span>📊</span> Insights
+      </div>
+      <div class="mobile-dropdown-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
+        <span>🎨 Theme</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+          <button onclick="setTheme('')"          style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#080810;color:white;font-size:11px;">Default</button>
+          <button onclick="setTheme('white')"     style="padding:4px 10px;border-radius:6px;border:1px solid #ccc;cursor:pointer;background:white;color:#333;font-size:11px;">White</button>
+          <button onclick="setTheme('grey')"      style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#2c2c2c;color:white;font-size:11px;">Grey</button>
+          <button onclick="setTheme('lightblue')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#e8f4fd;color:#0a2540;font-size:11px;">Blue</button>
+          <button onclick="setTheme('softdark')"  style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#1a1a2a;color:#e0e0ff;font-size:11px;">Soft Dark</button>
+        </div>
+      </div>
       <div class="mobile-dropdown-item" onclick="logout()">
         <span>🚪</span> Sign out
       </div>
@@ -1117,43 +872,40 @@ body.theme-softdark {
   </div>
 
   <div class="sidebar-scroll">
-    <!-- Groups -->
     <div class="section-hdr">
       <span>Groups</span>
       <button onclick="openGroupModal()">+ New</button>
     </div>
     <div id="groupsList"></div>
-
-    <!-- DMs -->
     <div class="section-hdr" style="margin-top:6px">
       <span>Direct Messages</span>
     </div>
     <div id="usersList"></div>
   </div>
 
-  <div class="sidebar-footer" style="position:relative;">
+  <!-- Desktop footer with ⋮ menu -->
+  <div class="sidebar-footer">
     <div class="me-av" id="meAv"></div>
     <div style="flex:1;min-width:0">
       <div class="me-name" id="meName"></div>
       <div class="me-status">Online</div>
     </div>
     <button class="profile-btn" id="profileBtn" onclick="toggleProfileMenu()">⋮</button>
-<div class="profile-item" style="flex-direction:column;align-items:flex-start;gap:8px;cursor:default;">
-  🎨 Theme
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
-    <button onclick="setTheme('')"          style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#080810;color:white;font-size:11px;">Default</button>
-    <button onclick="setTheme('white')"     style="padding:4px 10px;border-radius:6px;border:1px solid #ccc;cursor:pointer;background:white;color:#333;font-size:11px;">White</button>
-    <button onclick="setTheme('grey')"      style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#2c2c2c;color:white;font-size:11px;">Grey</button>
-    <button onclick="setTheme('lightblue')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#e8f4fd;color:#0a2540;font-size:11px;">Blue</button>
-    <button onclick="setTheme('softdark')"  style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#1a1a2a;color:#e0e0ff;font-size:11px;">Soft Dark</button>
-  </div>
-</div>
-    <button class="logout-btn" onclick="logout()">Sign out</button>
     <div class="profile-dropdown" id="profileDropdown">
       <div class="profile-item" onclick="openProfileModal(); toggleProfileMenu()">👤 Profile</div>
       <div class="profile-item" onclick="openGroupModal(); toggleProfileMenu()">➕ New group</div>
       <div class="profile-item" onclick="openMultiGroupModal(); toggleProfileMenu()">👥 Multiple groups</div>
-      <div class="profile-item" onclick="window.location.href='insights.html'">📊 Insights</div>
+      <div class="profile-item" onclick="window.location.href='insights.html'; toggleProfileMenu()">📊 Insights</div>
+      <div class="theme-row">
+        <div class="theme-row-label">🎨 Theme</div>
+        <div class="theme-btns">
+          <button onclick="setTheme('')"          style="background:#080810;color:white;border:none;">Default</button>
+          <button onclick="setTheme('white')"     style="background:white;color:#333;border:1px solid #ccc;">White</button>
+          <button onclick="setTheme('grey')"      style="background:#2c2c2c;color:white;border:none;">Grey</button>
+          <button onclick="setTheme('lightblue')" style="background:#e8f4fd;color:#0a2540;border:none;">Blue</button>
+          <button onclick="setTheme('softdark')"  style="background:#1a1a2a;color:#e0e0ff;border:none;">Soft Dark</button>
+        </div>
+      </div>
       <div class="profile-item" onclick="logout()">🚪 Sign out</div>
       <div class="profile-item" onclick="deleteAccount()">🗑️ Delete account</div>
     </div>
@@ -1187,26 +939,20 @@ body.theme-softdark {
   </div>
 
   <div class="input-bar" id="inputBar">
-    <!-- Media preview -->
     <div class="media-preview" id="mediaPreview">
       <span id="previewThumb"></span>
       <span id="previewName">file.jpg</span>
       <button onclick="clearMedia()">✕</button>
     </div>
-
     <div class="input-row">
-      <!-- Emoji -->
       <button class="icon-btn" title="Emoji" onclick="toggleEmoji(event)">😊</button>
-      <!-- Media upload -->
       <button class="icon-btn" title="Attach media" onclick="document.getElementById('fileInput').click()">📎</button>
       <input type="file" id="fileInput" accept="image/*,video/*">
-
       <textarea class="msg-input" id="msgInput" rows="1" placeholder="Message… (Enter to send)"></textarea>
       <button class="send-btn" onclick="sendMessage()">➤</button>
     </div>
   </div>
 
-  <!-- Emoji panel -->
   <div class="emoji-panel" id="emojiPanel">
     <div class="emoji-cats" id="emojiCats"></div>
     <input class="emoji-search" id="emojiSearch" placeholder="Search emoji…">
@@ -1238,10 +984,11 @@ body.theme-softdark {
     <label style="margin-bottom:8px;display:block;font-size:12px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;">Upload profile photo</label>
     <input type="file" id="profilePicInput" accept="image/*">
     <p><strong>Username:</strong> <span id="profileUsername"></span></p>
-    <div class="modal-btns" style="flex-wrap:wrap;gap:10px;">
+    <div class="modal-btns" style="flex-wrap:wrap;gap:10px;margin-top:16px;">
       <button class="btn-cancel" onclick="closeProfileModal()">Cancel</button>
-      <button class="btn-create" onclick="saveProfilePicture()">Save profile</button>
-      <button class="btn-cancel" style="background: rgba(255,107,107,0.15); color: var(--red);" onclick="deleteAccount()">Delete account</button>
+      <button class="btn-create" onclick="saveProfilePicture()">Save photo</button>
+      <button class="btn-cancel" style="background:rgba(255,165,0,0.15);color:#ffa532;" onclick="removeProfilePicture()">Remove photo</button>
+      <button class="btn-cancel" style="background:rgba(255,107,107,0.15);color:var(--red);" onclick="deleteAccount()">Delete account</button>
     </div>
   </div>
 </div>
@@ -1280,53 +1027,53 @@ body.theme-softdark {
   </div>
 </div>
 
+<!-- ─── CONTEXT MENU (single, correct one) ───────────────────────────────── -->
+<div id="userContextMenu" style="display:none;position:fixed;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:6px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.6);min-width:180px;">
+  <div id="ctxUsername" style="padding:8px 12px;font-size:11px;color:#55557a;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;"></div>
+  <div onclick="deleteChat()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b6b;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,107,0.1)'" onmouseout="this.style.background='none'">🗑️ Delete chat</div>
+  <div onclick="blockUser()"  style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b9d;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,157,0.1)'" onmouseout="this.style.background='none'">🚫 Block user</div>
+</div>
+
 <script>
 // ─── Bootstrap ────────────────────────────────────────────────────────────
 const me = localStorage.getItem('username') || '';
 if (!me) { window.location.href = 'login.html'; throw new Error('No user'); }
 
-let selected    = null;   // { type: 'dm'|'group', id: string, name: string }
+let selected    = null;
 let typingTimer = null;
-let allUsers      = [];
-let myGroups      = [];
-let onlineSet     = new Set();
-let pendingFile   = null;   // { file, url, type }
+let allUsers    = [];
+let myGroups    = [];
+let onlineSet   = new Set();
+let pendingFile = null;
 let profileAvatar = null;
 let profileFile   = null;
 
-// ─── Set up my footer ─────────────────────────────────────────────────────
+// ─── Desktop footer avatar ────────────────────────────────────────────────
 const meAv = document.getElementById('meAv');
 meAv.textContent = me[0].toUpperCase();
 meAv.className   = 'me-av ' + avColor(me);
 document.getElementById('meName').textContent = me;
 
-// ─── Populate mobile topbar ───────────────────────────────────────────────
+// ─── Mobile topbar avatar ─────────────────────────────────────────────────
 const mobileAv = document.getElementById('mobileAv');
 mobileAv.textContent = me[0].toUpperCase();
 mobileAv.className   = 'me-av ' + avColor(me);
 document.getElementById('mobileName').textContent = me;
 
 function toggleMobileMenu() {
-  const dd = document.getElementById('mobileDropdown');
-  dd.classList.toggle('open');
+  document.getElementById('mobileDropdown').classList.toggle('open');
 }
 
 function toggleProfileMenu() {
-  const dd = document.getElementById('profileDropdown');
-  dd.classList.toggle('open');
+  document.getElementById('profileDropdown').classList.toggle('open');
 }
 
-function closeProfileMenu() {
-  const dd = document.getElementById('profileDropdown');
-  if (dd) dd.classList.remove('open');
-}
-
-// Close dropdown when clicking outside
+// Close dropdowns when clicking outside
 document.addEventListener('click', function(e) {
-  const btn = document.getElementById('mobileMenuBtn');
-  const dd  = document.getElementById('mobileDropdown');
-  if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
-    dd.classList.remove('open');
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const mobileDd  = document.getElementById('mobileDropdown');
+  if (mobileDd && mobileBtn && !mobileBtn.contains(e.target) && !mobileDd.contains(e.target)) {
+    mobileDd.classList.remove('open');
   }
   const profileBtn = document.getElementById('profileBtn');
   const profileDd  = document.getElementById('profileDropdown');
@@ -1359,11 +1106,6 @@ function setMyAvatar(url) {
   }
 }
 
-function renderAvatarHtml(username, avatarUrl) {
-  if (avatarUrl) return `<img src="${avatarUrl}" alt="${username}">`;
-  return username[0].toUpperCase();
-}
-
 function openProfileModal() {
   document.getElementById('profileUsername').textContent = me;
   const preview = document.getElementById('profilePhotoPreview');
@@ -1386,8 +1128,7 @@ document.getElementById('profilePicInput').addEventListener('change', function(e
   if (!file) return;
   profileFile = file;
   const url = URL.createObjectURL(file);
-  const preview = document.getElementById('profilePhotoPreview');
-  preview.innerHTML = `<img src="${url}" alt="preview">`;
+  document.getElementById('profilePhotoPreview').innerHTML = `<img src="${url}" alt="preview">`;
 });
 
 async function saveProfilePicture() {
@@ -1395,10 +1136,7 @@ async function saveProfilePicture() {
   const fd = new FormData();
   fd.append('avatar', profileFile);
   fd.append('username', me);
-  const res = await fetch('/api/profile-picture', {
-    method: 'POST',
-    body: fd
-  });
+  const res  = await fetch('/api/profile-picture', { method: 'POST', body: fd });
   const data = await res.json();
   if (data.avatarUrl) {
     profileAvatar = data.avatarUrl;
@@ -1410,11 +1148,29 @@ async function saveProfilePicture() {
   }
 }
 
+async function removeProfilePicture() {
+  if (!confirm('Remove your profile picture?')) return;
+  const res  = await fetch('/api/profile-picture/remove', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: me })
+  });
+  const data = await res.json();
+  if (data.success) {
+    profileAvatar = null;
+    meAv.textContent = me[0].toUpperCase();
+    meAv.className = 'me-av ' + avColor(me);
+    mobileAv.textContent = me[0].toUpperCase();
+    mobileAv.className = 'me-av ' + avColor(me);
+    document.getElementById('profilePhotoPreview').textContent = '📷';
+    closeProfileModal();
+    showToast('Profile', 'Photo removed');
+  }
+}
+
 async function deleteAccount() {
   if (!confirm('Delete your account permanently? This cannot be undone.')) return;
-  const res = await fetch('/api/delete-account/' + me, {
-    method: 'DELETE'
-  });
+  const res  = await fetch('/api/delete-account/' + me, { method: 'DELETE' });
   const data = await res.json();
   if (data.success) {
     localStorage.removeItem('username');
@@ -1426,7 +1182,6 @@ async function deleteAccount() {
 
 // ─── Socket ───────────────────────────────────────────────────────────────
 const socket = io();
-
 socket.on('connect', () => { socket.emit('user_join', me); });
 
 socket.on('user_list', users => {
@@ -1436,7 +1191,6 @@ socket.on('user_list', users => {
 
 socket.on('receive_message', data => {
   const { sender, receiver, groupId, message, mediaUrl, mediaType, _id, seen, delivered, emotion } = data;
-
   if (groupId) {
     if (selected?.type === 'group' && selected.id === groupId) {
       if (sender !== me) {
@@ -1463,7 +1217,6 @@ socket.on('receive_message', data => {
   }
 });
 
-// Server confirmation after our message is saved
 socket.on('message_sent', data => {
   const rows = document.querySelectorAll('.msg-row.mine');
   if (rows.length > 0) {
@@ -1476,7 +1229,6 @@ socket.on('message_sent', data => {
 
 socket.on('messages_seen', ({ by, sender }) => {
   if (sender === me) {
-    // Update all unseen ticks in current chat to seen
     document.querySelectorAll('.ticks.delivered').forEach(el => {
       el.classList.remove('delivered');
       el.classList.add('seen');
@@ -1509,25 +1261,24 @@ loadAll();
 
 // ─── Render sidebar ───────────────────────────────────────────────────────
 function renderDMs() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
+  const q    = document.getElementById('searchInput').value.toLowerCase();
   const list = document.getElementById('usersList');
   list.innerHTML = '';
 
-  const blocked = JSON.parse(localStorage.getItem('blocked_' + me) || '[]');
-const filtered = allUsers.filter(u => u.username.toLowerCase().includes(q) && !blocked.includes(u.username));
+  const blocked  = JSON.parse(localStorage.getItem('blocked_' + me) || '[]');
+  const filtered = allUsers.filter(u => u.username.toLowerCase().includes(q) && !blocked.includes(u.username));
+
   if (!filtered.length) {
     list.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:var(--muted)">No users found</div>`;
     return;
   }
 
   filtered.forEach(u => {
-    const username = u.username;
-    const online  = onlineSet.has(username);
-    const unread  = getUnread('dm_' + username);
-    const isActive = selected?.type === 'dm' && selected.id === username;
-    const avatarHtml = u.avatarUrl
-      ? `<img src="${u.avatarUrl}" alt="${username}">`
-      : username[0].toUpperCase();
+    const username   = u.username;
+    const online     = onlineSet.has(username);
+    const unread     = getUnread('dm_' + username);
+    const isActive   = selected?.type === 'dm' && selected.id === username;
+    const avatarHtml = u.avatarUrl ? `<img src="${u.avatarUrl}" alt="${username}">` : username[0].toUpperCase();
     const avatarClass = 'av' + (u.avatarUrl ? '' : ' ' + avColor(username));
 
     const el = document.createElement('div');
@@ -1535,10 +1286,10 @@ const filtered = allUsers.filter(u => u.username.toLowerCase().includes(q) && !b
     el.dataset.id = 'dm_' + username;
     el.onclick = () => openDM(username);
     el.oncontextmenu = (e) => showUserContext(e, username);
-el.addEventListener('touchstart', (e) => {
-  const t = setTimeout(() => showUserContext(e.touches[0], username), 600);
-  el.addEventListener('touchend', () => clearTimeout(t), { once: true });
-});
+    el.addEventListener('touchstart', (e) => {
+      const t = setTimeout(() => showUserContext(e.touches[0], username), 600);
+      el.addEventListener('touchend', () => clearTimeout(t), { once: true });
+    });
     el.innerHTML = `
       <div class="${avatarClass}">
         ${avatarHtml}
@@ -1562,7 +1313,7 @@ function renderGroups() {
     return;
   }
   myGroups.forEach(g => {
-    const unread  = getUnread('grp_' + g.groupId);
+    const unread   = getUnread('grp_' + g.groupId);
     const isActive = selected?.type === 'group' && selected.id === g.groupId;
     const el = document.createElement('div');
     el.className = 'conv-item' + (isActive ? ' active' : '');
@@ -1588,18 +1339,14 @@ async function openDM(username) {
   selected = { type: 'dm', id: username, name: username };
   clearUnread('dm_' + username);
   renderDMs();
-
   showChatUI();
   showChatOnMobile();
   pushMobileHistory();
   setHeader(username[0].toUpperCase(), avColor(username), false, username, onlineSet.has(username) ? 'Online' : 'Offline');
-
   document.getElementById('msgsWrap').innerHTML = '<div class="date-div">Today</div>';
-
   const msgs = await fetch(`/api/messages/dm/${me}/${username}`).then(r => r.json());
   msgs.forEach(m => appendBubble(m));
   scrollBottom();
-
   markSeen(username, username, null);
   document.getElementById('msgInput').focus();
 }
@@ -1608,14 +1355,11 @@ async function openGroup(g) {
   selected = { type: 'group', id: g.groupId, name: g.name, members: g.members };
   clearUnread('grp_' + g.groupId);
   renderGroups();
-
   showChatUI();
   showChatOnMobile();
   pushMobileHistory();
   setHeader('👥', 'av2', true, g.name, `${g.members.length} members`);
-
   document.getElementById('msgsWrap').innerHTML = '<div class="date-div">Today</div>';
-
   const msgs = await fetch(`/api/messages/group/${g.groupId}`).then(r => r.json());
   msgs.forEach(m => appendBubble(m));
   scrollBottom();
@@ -1630,14 +1374,14 @@ function showChatUI() {
 }
 
 function setHeader(avText, avClass, isGroup, name, sub) {
-  const av = document.getElementById('hdrAv');
-  if (!isGroup && allUsers.find(u => u.username === name)?.avatarUrl) {
-    const url = allUsers.find(u => u.username === name).avatarUrl;
-    av.innerHTML = `<img src="${url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+  const av  = document.getElementById('hdrAv');
+  const user = allUsers.find(u => u.username === name);
+  if (!isGroup && user?.avatarUrl) {
+    av.innerHTML = `<img src="${user.avatarUrl}" alt="${name}">`;
     av.className = 'hdr-av';
   } else {
     av.textContent = avText;
-    av.className = 'hdr-av ' + avClass + (isGroup ? ' group' : '');
+    av.className   = 'hdr-av ' + avClass + (isGroup ? ' group' : '');
   }
   document.getElementById('hdrName').textContent = name;
   document.getElementById('hdrSub').textContent  = sub;
@@ -1647,18 +1391,16 @@ function setHeader(avText, avClass, isGroup, name, sub) {
 function appendBubble(m) {
   const isMine = m.sender === me;
   const wrap   = document.getElementById('msgsWrap');
+  const emotion = m.emotion || 'neutral';
 
   const row = document.createElement('div');
   row.className = 'msg-row ' + (isMine ? 'mine' : 'theirs');
-  const emotion = m.emotion || 'neutral';
-if (isMine) row.classList.add(emotion);
   if (m._id) row.dataset.msgId = m._id;
 
-  const d = new Date(m.createdAt);
+  const d       = new Date(m.createdAt);
   const timeStr = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
 
   let bodyHtml = '';
-
   if (!isMine && selected?.type === 'group') {
     bodyHtml += `<div class="msg-sender">${m.sender}</div>`;
   }
@@ -1677,10 +1419,9 @@ if (isMine) row.classList.add(emotion);
 
   bodyHtml += `<div class="bubble ${emotion}">${bubbleContent}</div>`;
 
-  // Footer (time + ticks)
   let tickClass = 'sent', tickText = '✓';
   if (isMine) {
-    if (m.seen)      { tickClass = 'seen';      tickText = '✓✓'; }
+    if (m.seen)           { tickClass = 'seen';      tickText = '✓✓'; }
     else if (m.delivered) { tickClass = 'delivered'; tickText = '✓✓'; }
   }
 
@@ -1691,16 +1432,16 @@ if (isMine) row.classList.add(emotion);
     </div>
   `;
 
- row.innerHTML = bodyHtml;
-row.oncontextmenu = (e) => {
-  if (!m._id) return;
-  e.preventDefault();
-  if (!confirm('Delete this message?')) return;
-  fetch(`/api/message/${m._id}`, { method: 'DELETE' })
-    .then(r => r.json())
-    .then(d => { if (d.success) row.remove(); });
-};
-wrap.appendChild(row);
+  row.innerHTML = bodyHtml;
+  row.oncontextmenu = (e) => {
+    if (!m._id) return;
+    e.preventDefault();
+    if (!confirm('Delete this message?')) return;
+    fetch(`/api/message/${m._id}`, { method: 'DELETE' })
+      .then(r => r.json())
+      .then(d => { if (d.success) row.remove(); });
+  };
+  wrap.appendChild(row);
 }
 
 function scrollBottom() {
@@ -1715,11 +1456,9 @@ async function sendMessage() {
   if (!selected) return;
   if (!message && !pendingFile) return;
 
-  let mediaUrl  = null;
-  let mediaType = null;
-
+  let mediaUrl = null, mediaType = null;
   if (pendingFile) {
-    const fd = new FormData();
+    const fd   = new FormData();
     fd.append('media', pendingFile.file);
     const res  = await fetch('/api/upload', { method: 'POST', body: fd });
     const data = await res.json();
@@ -1729,25 +1468,18 @@ async function sendMessage() {
   }
 
   const payload = {
-    sender: me,
-    message,
-    mediaUrl,
-    mediaType,
-    ...(selected.type === 'dm'
-      ? { receiver: selected.id }
-      : { groupId: selected.id })
+    sender: me, message, mediaUrl, mediaType,
+    ...(selected.type === 'dm' ? { receiver: selected.id } : { groupId: selected.id })
   };
 
-  // Optimistic UI - show bubble immediately
   appendBubble({ sender: me, message, mediaUrl, mediaType, delivered: false, seen: false, createdAt: new Date() });
   scrollBottom();
-
   socket.emit('send_message', payload);
   input.value = '';
   autoResize();
 }
 
-// ─── Typing indicator ─────────────────────────────────────────────────────
+// ─── Typing ───────────────────────────────────────────────────────────────
 document.getElementById('msgInput').addEventListener('input', () => {
   autoResize();
   if (!selected) return;
@@ -1776,7 +1508,6 @@ function showTyping(username) {
   }, 2200);
 }
 
-// ─── Mark seen ────────────────────────────────────────────────────────────
 function markSeen(sender, receiver, groupId) {
   socket.emit('message_seen', { viewer: me, sender, groupId });
   if (receiver) {
@@ -1794,7 +1525,6 @@ document.getElementById('fileInput').addEventListener('change', e => {
   const url  = URL.createObjectURL(file);
   const type = file.type.startsWith('video') ? 'video' : 'image';
   pendingFile = { file, url, type };
-
   const thumb = document.getElementById('previewThumb');
   if (type === 'image') {
     thumb.innerHTML = `<img src="${url}" style="height:50px;border-radius:6px">`;
@@ -1815,17 +1545,11 @@ function clearMedia() {
 // ─── Emoji ────────────────────────────────────────────────────────────────
 const EMOJI_DATA = {
   '😊': ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😗','😙','😚','😋','😛','😝','😜','🤪','🤨','🧐','🤓','😎','🥸','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬','🤯','😳','🥵','🥶','😱','😨','😰','😥','😓','🤡','💃','🕺','👻','💀','☠️','👽','🤖','🌚','😺','🫡','😹','💯','🎀','🔔'],
-
   '👋': ['👋','🤚','🖐️','✋','🖖','👌','🤌','🤏','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','✍️','💅','🤳','💪','🦾','🦿','🦵','🦶','👂','🦻','👃','🫀','🫁','🧠','🦷','🦴','👁️','👀','👅','👄','🫶','🫱','🫲','🤵','👰','🧑‍💻','👨‍💻','👩‍💻'],
-
   '❤️': ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝','💟','☮️','✝️','☪️','🕉️','✡️','🔯','🕎','☯️','🛐','⛎','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓','🆔','⚛️','🉑','☢️','☣️','💌','💋','💍','💎','🔥','✨','⭐','🌟','💫','⚡'],
-
   '🐶': ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🙈','🙉','🙊','🐔','🐧','🐦','🐤','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🪱','🐛','🦋','🐌','🐞','🐜','🪲','🦟','🦗','🕷️','🦂','🐢','🐍','🦎','🦖','🦕','🐙','🦑','🦐','🦞','🦀','🐬','🦈','🐳','🐋','🐘','🦒','🦓','🦘','🐪','🦙','🐓','🦚','🦜'],
-
   '🍕': ['🍕','🍔','🌭','🍟','🌮','🌯','🥙','🧆','🥚','🍳','🥘','🍲','🫕','🥣','🥗','🍿','🧂','🥫','🍱','🍘','🍙','🍚','🍛','🍜','🍝','🍠','🍢','🍣','🍤','🍥','🥮','🍡','🥟','🥠','🥡','🍦','🍧','🍨','🍩','🍪','🎂','🍰','🧁','🥧','🍫','🍬','🍭','🍮','🍯','🍷','🥂','🍸','☕','🧋','🥤','🧃','🍹','🍺','🍻','🥛','🍎','🍉','🍓','🍇'],
-
   '⚽': ['⚽','🏀','🏈','⚾','🥎','🎾','🏐','🏉','🥏','🎱','🪀','🏓','🏸','🏒','🥍','🏑','🥅','⛳','🪁','🏹','🎣','🤿','🥊','🥋','🎽','🛹','🛼','🛷','⛸️','🥌','🎿','⛷️','🏂','🪂','🏋️','🤼','🤺','🤸','⛹️','🏇','🏊','🚴','🧗','🏌️','🏆','🥇','🥈','🥉','🎮','🕹️','♟️','🎯'],
-
   '🌍': ['🌍','🌎','🌏','🌐','🗺️','🧭','🏔️','⛰️','🌋','🗻','🏕️','🏖️','🏜️','🏝️','🏞️','🏟️','🏛️','🏗️','🧱','🪨','🪵','🛖','🏠','🏡','🏢','🏣','🏤','🏥','🏦','🏨','🏩','🏪','🏫','🏬','🏭','🏯','🏰','💒','🗼','🗽','⛪','🕌','🛕','🕍','⛩️','🕋','⛲','⛺','🌁','🌃','🏙️','🌄','🌅','🌆','🌇','🌉','🚗','🚕','🚌','🚎','🏎️','✈️','🚀','🛸','🚁','🛳️']
 };
 
@@ -1833,7 +1557,6 @@ const CATS = Object.keys(EMOJI_DATA);
 let activeCat = CATS[0];
 
 function buildEmojiPicker() {
-  // Category buttons
   const cats = document.getElementById('emojiCats');
   CATS.forEach(c => {
     const b = document.createElement('button');
@@ -1843,7 +1566,6 @@ function buildEmojiPicker() {
     cats.appendChild(b);
   });
   renderEmojis();
-
   document.getElementById('emojiSearch').addEventListener('input', renderEmojis);
 }
 
@@ -1931,10 +1653,8 @@ async function createGroup() {
   if (!name) return alert('Enter a group name');
   const members = [...document.querySelectorAll('.member-chip.selected')].map(c => c.dataset.user);
   if (!members.length) return alert('Select at least one member');
-
   const res  = await fetch('/api/groups/create', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, members, createdBy: me })
   });
   const data = await res.json();
@@ -1957,25 +1677,17 @@ async function createMultipleGroups() {
   if (!names.length) return alert('Enter at least one group name.');
   const members = [...document.querySelectorAll('#multiMembersGrid .member-chip.selected')].map(c => c.dataset.user);
   if (!members.length) return alert('Select at least one member.');
-
-  const results = await Promise.all(names.map(name => {
-    return fetch('/api/groups/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+  const results = await Promise.all(names.map(name =>
+    fetch('/api/groups/create', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, members, createdBy: me })
-    }).then(r => r.json());
-  }));
-
+    }).then(r => r.json())
+  ));
   const created = results.filter(r => r.groupId);
-  if (!created.length) {
-    alert(results[0]?.message || 'Unable to create groups.');
-    return;
-  }
-
+  if (!created.length) { alert(results[0]?.message || 'Unable to create groups.'); return; }
   created.forEach(data => {
     myGroups.push({ groupId: data.groupId, name: data.name, members: data.members, createdBy: me });
   });
-
   renderGroups();
   closeMultiGroupModal();
   if (created[0]) openGroup({ groupId: created[0].groupId, name: created[0].name, members: created[0].members });
@@ -1986,9 +1698,7 @@ function openLightbox(src) {
   document.getElementById('lightboxImg').src = src;
   document.getElementById('lightbox').classList.add('on');
 }
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('on');
-}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('on'); }
 
 // ─── Toast ────────────────────────────────────────────────────────────────
 let toastTO;
@@ -2001,7 +1711,7 @@ function showToast(sender, msg) {
   toastTO = setTimeout(() => t.classList.remove('show'), 4000);
 }
 
-// ─── Unread badges ────────────────────────────────────────────────────────
+// ─── Unread ───────────────────────────────────────────────────────────────
 function getUnread(key) { return parseInt(localStorage.getItem('u_' + me + '_' + key) || '0'); }
 function bumpUnread(key) { localStorage.setItem('u_' + me + '_' + key, getUnread(key) + 1); renderDMs(); renderGroups(); }
 function clearUnread(key) { localStorage.removeItem('u_' + me + '_' + key); }
@@ -2019,9 +1729,8 @@ function esc(str) {
 async function deleteGroup(e, groupId) {
   e.stopPropagation();
   if (!confirm('Delete this group? This cannot be undone.')) return;
-  const res = await fetch('/api/groups/' + groupId, {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
+  const res  = await fetch('/api/groups/' + groupId, {
+    method: 'DELETE', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username: me })
   });
   const data = await res.json();
@@ -2045,7 +1754,7 @@ function logout() {
   window.location.href = 'login.html';
 }
 
-// ─── Mobile Navigation (WhatsApp-style) ──────────────────────────────────
+// ─── Mobile Navigation ────────────────────────────────────────────────────
 function isMobile() { return window.innerWidth <= 768; }
 
 function showChatOnMobile() {
@@ -2058,30 +1767,26 @@ function goBackToSidebar() {
   document.querySelector('.sidebar').classList.remove('slide-out');
   document.querySelector('.chat-area').classList.remove('slide-in');
   selected = null;
-  // Close emoji if open
   document.getElementById('emojiPanel').classList.remove('on');
 }
 
-// Handle browser back button on mobile
 window.addEventListener('popstate', () => {
   if (isMobile() && selected) goBackToSidebar();
 });
 
-// Push state when opening chat so back button works
 function pushMobileHistory() {
   if (isMobile()) history.pushState({ chat: true }, '');
 }
+
+// ─── Smart Replies ────────────────────────────────────────────────────────
 function showSmartReplies(emotion) {
   const existing = document.getElementById('smartReplyBar');
   if (existing) existing.remove();
-
   const replies = getSuggestions(emotion);
   if (!replies.length) return;
-
   const bar = document.createElement('div');
   bar.id = 'smartReplyBar';
   bar.style.cssText = 'display:flex;gap:8px;padding:8px 16px;flex-wrap:wrap;';
-
   replies.forEach(text => {
     const btn = document.createElement('button');
     btn.textContent = text;
@@ -2093,18 +1798,18 @@ function showSmartReplies(emotion) {
     };
     bar.appendChild(btn);
   });
-
   document.getElementById('inputBar').insertBefore(bar, document.querySelector('.input-row'));
 }
+
+// ─── Theme ────────────────────────────────────────────────────────────────
 function setTheme(theme) {
   document.body.className = theme ? 'theme-' + theme : '';
   localStorage.setItem('chatTheme', theme);
 }
-
-// Load saved theme on startup
 const savedTheme = localStorage.getItem('chatTheme');
 if (savedTheme) setTheme(savedTheme);
-// ── Context Menu ──────────────────────────────────────────────────────
+
+// ─── Context Menu ─────────────────────────────────────────────────────────
 let ctxTarget = null;
 
 function showUserContext(e, username) {
@@ -2128,7 +1833,7 @@ document.addEventListener('click', hideContextMenu);
 async function deleteChat() {
   if (!ctxTarget) return;
   if (!confirm(`Delete all messages with ${ctxTarget}? This cannot be undone.`)) return;
-  const res = await fetch(`/api/messages/dm/${me}/${ctxTarget}`, { method: 'DELETE' });
+  const res  = await fetch(`/api/messages/dm/${me}/${ctxTarget}`, { method: 'DELETE' });
   const data = await res.json();
   if (data.success) {
     if (selected?.id === ctxTarget) {
@@ -2156,15 +1861,5 @@ function blockUser() {
 </script>
 <script src="/js/replySuggestions.js"></script>
 <script src="/js/emotion-chat.js"></script>
-<div id="userContextMenu" style="display:none;position:fixed;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:6px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.6);min-width:180px;">
-  <div id="ctxUsername" style="padding:8px 12px;font-size:11px;color:#55557a;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;"></div>
-  <div onclick="deleteChat()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b6b;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,107,0.1)'" onmouseout="this.style.background='none'">🗑️ Delete chat</div>
-  <div onclick="blockUser()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b9d;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,157,0.1)'" onmouseout="this.style.background='none'">🚫 Block user</div>
-</div>
-<div id="userContextMenu" style="display:none;position:fixed;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:6px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.6);min-width:180px;">
-  <div id="ctxUsername" style="padding:8px 12px;font-size:11px;color:#55557a;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;"></div>
-  <div onclick="deleteChat()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b6b;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,107,0.1)'" onmouseout="this.style.background='none'">🗑️ Delete chat</div>
-  <div onclick="blockUser()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b9d;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,157,0.1)'" onmouseout="this.style.background='none'">🚫 Block user</div>
-</div>
 </body>
 </html>
