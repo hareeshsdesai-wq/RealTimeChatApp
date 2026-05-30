@@ -130,7 +130,27 @@ app.get('/api/messages/group/:groupId', async (req, res) => {
     res.json([]);
   }
 });
+// ── Insights Route ──────────────────────────────────────────────────────
+app.get('/api/insights/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const msgs = await Message.find({ sender: username });
 
+    const counts = { happy: 0, positive: 0, sad: 0, angry: 0, neutral: 0 };
+    msgs.forEach(m => {
+      const e = m.emotion || 'neutral';
+      if (counts[e] !== undefined) counts[e]++;
+      else counts.neutral++;
+    });
+
+    const total = msgs.length;
+    const topEmotion = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+
+    res.json({ total, counts, topEmotion });
+  } catch (e) {
+    res.json({ total: 0, counts: {}, topEmotion: 'neutral' });
+  }
+});
 app.post('/api/messages/seen', async (req, res) => {
   try {
     const { viewer, sender } = req.body;
@@ -173,6 +193,21 @@ app.get('/api/groups/:username', async (req, res) => {
     res.json(groups);
   } catch (e) {
     res.json([]);
+  }
+});
+// ── Delete Chat Route ────────────────────────────────────────────────────
+app.delete('/api/messages/dm/:user1/:user2', async (req, res) => {
+  try {
+    const { user1, user2 } = req.params;
+    await Message.deleteMany({
+      $or: [
+        { sender: user1, receiver: user2 },
+        { sender: user2, receiver: user1 }
+      ]
+    });
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false });
   }
 });
 

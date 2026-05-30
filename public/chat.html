@@ -29,7 +29,37 @@
       --sent-bg: linear-gradient(135deg, #7c6fff 0%, #b06fff 100%);
       --recv-bg: #1a1a2e;
     }
+body.theme-white {
+  --bg: #ffffff; --sidebar: #f5f5f5; --surface: #ffffff;
+  --surface2: #f0f0f0; --surface3: #e8e8e8;
+  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.12);
+  --text: #1a1a2e; --text2: #555577; --muted: #9999aa;
+  --recv-bg: #f0f0f0;
+}
 
+body.theme-grey {
+  --bg: #2c2c2c; --sidebar: #242424; --surface: #2c2c2c;
+  --surface2: #333333; --surface3: #3a3a3a;
+  --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f0; --text2: #bbbbbb; --muted: #888888;
+  --recv-bg: #333333;
+}
+
+body.theme-lightblue {
+  --bg: #e8f4fd; --sidebar: #ddeefa; --surface: #ffffff;
+  --surface2: #d0e8f7; --surface3: #c0ddf2;
+  --border: rgba(0,100,200,0.1); --border2: rgba(0,100,200,0.15);
+  --text: #0a2540; --text2: #2a5080; --muted: #6a90b0;
+  --recv-bg: #d0e8f7;
+}
+
+body.theme-softdark {
+  --bg: #1a1a2a; --sidebar: #141420; --surface: #1e1e30;
+  --surface2: #242438; --surface3: #2a2a40;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.1);
+  --text: #e0e0ff; --text2: #9090bb; --muted: #606080;
+  --recv-bg: #242438;
+}
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
@@ -1065,6 +1095,18 @@
       <div class="mobile-dropdown-item" onclick="openMultiGroupModal(); toggleMobileMenu()">
         <span>👥</span> Multiple groups
       </div>
+      <div class="mobile-dropdown-item" onclick="window.location.href='insights.html'">
+  <span>📊</span> Insights
+</div><div class="mobile-dropdown-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
+  <span>🎨 Theme</span>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+    <button onclick="setTheme('')"          style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#080810;color:white;font-size:11px;">Default</button>
+    <button onclick="setTheme('white')"     style="padding:4px 10px;border-radius:6px;border:1px solid #ccc;cursor:pointer;background:white;color:#333;font-size:11px;">White</button>
+    <button onclick="setTheme('grey')"      style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#2c2c2c;color:white;font-size:11px;">Grey</button>
+    <button onclick="setTheme('lightblue')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#e8f4fd;color:#0a2540;font-size:11px;">Blue</button>
+    <button onclick="setTheme('softdark')"  style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#1a1a2a;color:#e0e0ff;font-size:11px;">Soft Dark</button>
+  </div>
+</div>
       <div class="mobile-dropdown-item" onclick="logout()">
         <span>🚪</span> Sign out
       </div>
@@ -1096,11 +1138,22 @@
       <div class="me-status">Online</div>
     </div>
     <button class="profile-btn" id="profileBtn" onclick="toggleProfileMenu()">⋮</button>
+    <div class="profile-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
+  🎨 Theme
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+    <button onclick="setTheme('')"       style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#080810;color:white;font-size:11px;">Default</button>
+    <button onclick="setTheme('white')"  style="padding:4px 10px;border-radius:6px;border:1px solid #ccc;cursor:pointer;background:white;color:#333;font-size:11px;">White</button>
+    <button onclick="setTheme('grey')"   style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#2c2c2c;color:white;font-size:11px;">Grey</button>
+    <button onclick="setTheme('lightblue')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#e8f4fd;color:#0a2540;font-size:11px;">Blue</button>
+    <button onclick="setTheme('softdark')"  style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:#1a1a2a;color:#e0e0ff;font-size:11px;">Soft Dark</button>
+  </div>
+</div>
     <button class="logout-btn" onclick="logout()">Sign out</button>
     <div class="profile-dropdown" id="profileDropdown">
       <div class="profile-item" onclick="openProfileModal(); toggleProfileMenu()">👤 Profile</div>
       <div class="profile-item" onclick="openGroupModal(); toggleProfileMenu()">➕ New group</div>
       <div class="profile-item" onclick="openMultiGroupModal(); toggleProfileMenu()">👥 Multiple groups</div>
+      <div class="profile-item" onclick="window.location.href='insights.html'">📊 Insights</div>
       <div class="profile-item" onclick="logout()">🚪 Sign out</div>
       <div class="profile-item" onclick="deleteAccount()">🗑️ Delete account</div>
     </div>
@@ -1460,7 +1513,8 @@ function renderDMs() {
   const list = document.getElementById('usersList');
   list.innerHTML = '';
 
-  const filtered = allUsers.filter(u => u.username.toLowerCase().includes(q));
+  const blocked = JSON.parse(localStorage.getItem('blocked_' + me) || '[]');
+const filtered = allUsers.filter(u => u.username.toLowerCase().includes(q) && !blocked.includes(u.username));
   if (!filtered.length) {
     list.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:var(--muted)">No users found</div>`;
     return;
@@ -1480,6 +1534,11 @@ function renderDMs() {
     el.className = 'conv-item' + (isActive ? ' active' : '');
     el.dataset.id = 'dm_' + username;
     el.onclick = () => openDM(username);
+    el.oncontextmenu = (e) => showUserContext(e, username);
+el.addEventListener('touchstart', (e) => {
+  const t = setTimeout(() => showUserContext(e.touches[0], username), 600);
+  el.addEventListener('touchend', () => clearTimeout(t), { once: true });
+});
     el.innerHTML = `
       <div class="${avatarClass}">
         ${avatarHtml}
@@ -2023,8 +2082,75 @@ function showSmartReplies(emotion) {
 
   document.getElementById('inputBar').insertBefore(bar, document.querySelector('.input-row'));
 }
+function setTheme(theme) {
+  document.body.className = theme ? 'theme-' + theme : '';
+  localStorage.setItem('chatTheme', theme);
+}
+
+// Load saved theme on startup
+const savedTheme = localStorage.getItem('chatTheme');
+if (savedTheme) setTheme(savedTheme);
+// ── Context Menu ──────────────────────────────────────────────────────
+let ctxTarget = null;
+
+function showUserContext(e, username) {
+  e.preventDefault();
+  e.stopPropagation();
+  ctxTarget = username;
+  const menu = document.getElementById('userContextMenu');
+  document.getElementById('ctxUsername').textContent = username;
+  menu.style.display = 'block';
+  menu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+  menu.style.top  = Math.min(e.clientY, window.innerHeight - 120) + 'px';
+}
+
+function hideContextMenu() {
+  document.getElementById('userContextMenu').style.display = 'none';
+  ctxTarget = null;
+}
+
+document.addEventListener('click', hideContextMenu);
+
+async function deleteChat() {
+  if (!ctxTarget) return;
+  if (!confirm(`Delete all messages with ${ctxTarget}? This cannot be undone.`)) return;
+  const res = await fetch(`/api/messages/dm/${me}/${ctxTarget}`, { method: 'DELETE' });
+  const data = await res.json();
+  if (data.success) {
+    if (selected?.id === ctxTarget) {
+      document.getElementById('msgsWrap').innerHTML = '<div class="date-div">Today</div>';
+    }
+    showToast('Deleted', `Chat with ${ctxTarget} cleared`);
+  }
+  hideContextMenu();
+}
+
+function blockUser() {
+  if (!ctxTarget) return;
+  if (!confirm(`Block ${ctxTarget}? They will be hidden from your list.`)) return;
+  const blocked = JSON.parse(localStorage.getItem('blocked_' + me) || '[]');
+  if (!blocked.includes(ctxTarget)) {
+    blocked.push(ctxTarget);
+    localStorage.setItem('blocked_' + me, JSON.stringify(blocked));
+  }
+  if (selected?.id === ctxTarget) selected = null;
+  allUsers = allUsers.filter(u => u.username !== ctxTarget);
+  renderDMs();
+  showToast('Blocked', `${ctxTarget} has been blocked`);
+  hideContextMenu();
+}
 </script>
 <script src="/js/replySuggestions.js"></script>
 <script src="/js/emotion-chat.js"></script>
+<div id="userContextMenu" style="display:none;position:fixed;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:6px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.6);min-width:180px;">
+  <div id="ctxUsername" style="padding:8px 12px;font-size:11px;color:#55557a;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;"></div>
+  <div onclick="deleteChat()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b6b;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,107,0.1)'" onmouseout="this.style.background='none'">🗑️ Delete chat</div>
+  <div onclick="blockUser()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b9d;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,157,0.1)'" onmouseout="this.style.background='none'">🚫 Block user</div>
+</div>
+<div id="userContextMenu" style="display:none;position:fixed;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:6px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.6);min-width:180px;">
+  <div id="ctxUsername" style="padding:8px 12px;font-size:11px;color:#55557a;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;"></div>
+  <div onclick="deleteChat()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b6b;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,107,0.1)'" onmouseout="this.style.background='none'">🗑️ Delete chat</div>
+  <div onclick="blockUser()" style="padding:10px 12px;cursor:pointer;border-radius:8px;font-size:13px;color:#ff6b9d;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(255,107,157,0.1)'" onmouseout="this.style.background='none'">🚫 Block user</div>
+</div>
 </body>
 </html>

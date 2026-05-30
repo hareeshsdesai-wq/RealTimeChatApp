@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatify Insights</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #080810; --surface: #12121f; --surface2: #1a1a2e;
+      --border: rgba(255,255,255,0.06); --accent: #7c6fff;
+      --accent2: #b8a9ff; --teal: #00e5c0; --text: #eeeeff;
+      --text2: #9999bb; --muted: #55557a;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 30px 20px; }
+    .header { text-align: center; margin-bottom: 40px; }
+    .header h1 { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; background: linear-gradient(90deg, var(--accent2), var(--teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+    .back-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,111,255,0.15); border: 1px solid rgba(124,111,255,0.3); color: var(--accent2); border-radius: 10px; padding: 8px 16px; font-size: 13px; font-family: inherit; cursor: pointer; text-decoration: none; margin-bottom: 30px; }
+    .back-btn:hover { background: rgba(124,111,255,0.25); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; max-width: 800px; margin: 0 auto 40px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; }
+    .stat-number { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: var(--accent2); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.8px; }
+    .chart-wrap { max-width: 400px; margin: 0 auto 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 30px; }
+    .chart-wrap h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+    .emotion-bars { max-width: 800px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 30px; }
+    .emotion-bars h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .bar-label { width: 70px; font-size: 13px; color: var(--text2); text-transform: capitalize; }
+    .bar-track { flex: 1; background: var(--surface2); border-radius: 99px; height: 10px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 99px; transition: width 1s ease; }
+    .bar-count { width: 40px; text-align: right; font-size: 13px; color: var(--muted); }
+    .loading { text-align: center; color: var(--muted); padding: 60px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<a href="chat.html" class="back-btn">← Back to Chat</a>
+
+<div class="header">
+  <h1>📊 Your Insights</h1>
+  <p id="subtext">Loading your emotion data...</p>
+</div>
+
+<div id="loadingDiv" class="loading">Analyzing your messages... 🔍</div>
+
+<div id="content" style="display:none">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number" id="totalMsgs">0</div>
+      <div class="stat-label">Messages Sent</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="topEmoji">😊</div>
+      <div class="stat-label">Top Emotion</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="positivePercent">0%</div>
+      <div class="stat-label">Positivity Rate</div>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <h2>Emotion Breakdown</h2>
+    <canvas id="emotionChart"></canvas>
+  </div>
+
+  <div class="emotion-bars">
+    <h2>Detailed Breakdown</h2>
+    <div id="barsContainer"></div>
+  </div>
+</div>
+
+<script>
+const me = localStorage.getItem('username');
+if (!me) window.location.href = 'login.html';
+
+const EMOTION_COLORS = {
+  happy:    '#FFD700',
+  positive: '#00E676',
+  sad:      '#2979FF',
+  angry:    '#FF1744',
+  neutral:  '#607D8B'
+};
+
+const EMOTION_EMOJIS = {
+  happy: '😄', positive: '👍', sad: '😢', angry: '😡', neutral: '😐'
+};
+
+async function loadInsights() {
+  document.getElementById('subtext').textContent = `Insights for ${me}`;
+  const res = await fetch(`/api/insights/${me}`);
+  const data = await res.json();
+
+  document.getElementById('loadingDiv').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+
+  // Stats
+  document.getElementById('totalMsgs').textContent = data.total;
+  document.getElementById('topEmoji').textContent = EMOTION_EMOJIS[data.topEmotion] || '😐';
+  const posCount = (data.counts.happy || 0) + (data.counts.positive || 0);
+  const posPercent = data.total > 0 ? Math.round((posCount / data.total) * 100) : 0;
+  document.getElementById('positivePercent').textContent = posPercent + '%';
+
+  // Pie chart
+  const emotions = Object.keys(EMOTION_COLORS);
+  const chartData = emotions.map(e => data.counts[e] || 0);
+  const colors = emotions.map(e => EMOTION_COLORS[e]);
+
+  new Chart(document.getElementById('emotionChart'), {
+    type: 'doughnut',
+    data: {
+      labels: emotions.map(e => e.charAt(0).toUpperCase() + e.slice(1)),
+      datasets: [{ data: chartData, backgroundColor: colors, borderWidth: 0 }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: '#9999bb', font: { family: 'DM Sans' } } } }
+    }
+  });
+
+  // Bars
+  const max = Math.max(...Object.values(data.counts), 1);
+  const container = document.getElementById('barsContainer');
+  emotions.forEach(e => {
+    const count = data.counts[e] || 0;
+    const pct = Math.round((count / max) * 100);
+    container.innerHTML += `
+      <div class="bar-row">
+        <div class="bar-label">${EMOTION_EMOJIS[e]} ${e}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${EMOTION_COLORS[e]}"></div></div>
+        <div class="bar-count">${count}</div>
+      </div>`;
+  });
+}
+
+loadInsights();
+</script>
+</body>
+</html>
